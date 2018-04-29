@@ -1,0 +1,11 @@
+JarIndex-Version: 1.0
+
+lwjgl-opengl-natives-windows.jar
+META-INF
+META-INF/versions
+META-INF/versions/9
+lwjgl_opengl.dll
+lwjgl_opengl.dll.sha1
+lwjgl_opengl32.dll
+lwjgl_opengl32.dll.sha1
+
