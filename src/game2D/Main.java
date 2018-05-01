@@ -7,8 +7,8 @@ import org.lwjgl.opengl.GL11;
 
 public class Main {
 	
-	private static final int WIDTH = 640;
-	private static final int HEIGHT = 480;
+	private static final int WIDTH = 1280;
+	private static final int HEIGHT = 720;
 	
 	public Main() {
 		if ( !GLFW.glfwInit()) {
@@ -27,22 +27,52 @@ public class Main {
 		GL.createCapabilities();
 		GL11.glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
 
+		float x = 0.0f;
+		float y = 0.0f;
+		
 		while (!GLFW.glfwWindowShouldClose(window)) {
-			GLFW.glfwPollEvents();			
+			
+			if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_A) == GL11.GL_TRUE) {
+				x -= 0.001f;
+			}
+			if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_D) == GL11.GL_TRUE) {
+				x += 0.001f;
+			}
+			if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_W) == GL11.GL_TRUE) {
+				y += 0.001f;
+			}
+			if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_S) == GL11.GL_TRUE) {
+				y -= 0.001f;
+			}
+			if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_ESCAPE) == GL11.GL_TRUE) {
+				GLFW.glfwSetWindowShouldClose(window, true);
+			}
+			
+			if (GLFW.glfwGetMouseButton(window, 0) == GL11.GL_TRUE) {
+				System.out.println("Left mouse button clicked.");
+			}
+			if (GLFW.glfwGetMouseButton(window, 1) == GL11.GL_TRUE) {
+				System.out.println("Right mouse button clicked.");
+			}
+			if (GLFW.glfwGetMouseButton(window, 2) == GL11.GL_TRUE) {
+				System.out.println("Middle mouse button clicked.");
+			}
+
+			GLFW.glfwPollEvents();
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 			GL11.glBegin(GL11.GL_QUADS);
 			
 			GL11.glColor4f(1, 0, 0, 1);
-			GL11.glVertex2f(-0.5f,  0.5f);
+			GL11.glVertex2f(-0.5f + x,  0.5f + y);
 			
 			GL11.glColor4f(0, 1, 0, 1);
-			GL11.glVertex2f( 0.5f,  0.5f);
+			GL11.glVertex2f( 0.5f + x,  0.5f + y);
 			
 			GL11.glColor4f(0, 0, 1, 1);
-			GL11.glVertex2f( 0.5f, -0.5f);
+			GL11.glVertex2f( 0.5f + x, -0.5f + y);
 			
 			GL11.glColor4f(1, 1, 1, 1);
-			GL11.glVertex2f(-0.5f, -0.5f);
+			GL11.glVertex2f(-0.5f + x, -0.5f + y);
 			
 			GL11.glEnd();
 
