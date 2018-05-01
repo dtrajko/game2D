@@ -26,6 +26,9 @@ public class Main {
 		GLFW.glfwMakeContextCurrent(window);
 		GL.createCapabilities();
 		GL11.glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
+		
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		Texture texture = new Texture("./res/grass.png");
 
 		float x = 0.0f;
 		float y = 0.0f;
@@ -33,21 +36,21 @@ public class Main {
 		while (!GLFW.glfwWindowShouldClose(window)) {
 			
 			if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_A) == GL11.GL_TRUE) {
-				x -= 0.001f;
+				x -= 0.0005f;
 			}
 			if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_D) == GL11.GL_TRUE) {
-				x += 0.001f;
+				x += 0.0005f;
 			}
 			if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_W) == GL11.GL_TRUE) {
-				y += 0.001f;
+				y += 0.0005f;
 			}
 			if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_S) == GL11.GL_TRUE) {
-				y -= 0.001f;
+				y -= 0.0005f;
 			}
 			if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_ESCAPE) == GL11.GL_TRUE) {
 				GLFW.glfwSetWindowShouldClose(window, true);
 			}
-			
+
 			if (GLFW.glfwGetMouseButton(window, 0) == GL11.GL_TRUE) {
 				System.out.println("Left mouse button clicked.");
 			}
@@ -60,20 +63,20 @@ public class Main {
 
 			GLFW.glfwPollEvents();
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+			texture.bind();
 			GL11.glBegin(GL11.GL_QUADS);
-			
-			GL11.glColor4f(1, 0, 0, 1);
-			GL11.glVertex2f(-0.5f + x,  0.5f + y);
-			
-			GL11.glColor4f(0, 1, 0, 1);
-			GL11.glVertex2f( 0.5f + x,  0.5f + y);
-			
-			GL11.glColor4f(0, 0, 1, 1);
-			GL11.glVertex2f( 0.5f + x, -0.5f + y);
-			
-			GL11.glColor4f(1, 1, 1, 1);
-			GL11.glVertex2f(-0.5f + x, -0.5f + y);
-			
+			// GL11.glColor4f(1, 0, 0, 1);
+			GL11.glTexCoord2f(0, 0);
+			GL11.glVertex2f(-0.1f + x,  0.15f + y);
+			// GL11.glColor4f(0, 1, 0, 1);
+			GL11.glTexCoord2f(1, 0);
+			GL11.glVertex2f( 0.1f + x,  0.15f + y);
+			// GL11.glColor4f(0, 0, 1, 1);
+			GL11.glTexCoord2f(1, 1);
+			GL11.glVertex2f( 0.1f + x, -0.15f + y);
+			// GL11.glColor4f(1, 1, 1, 1);
+			GL11.glTexCoord2f(0, 1);
+			GL11.glVertex2f(-0.1f + x, -0.15f + y);
 			GL11.glEnd();
 
 			GLFW.glfwSwapBuffers(window);
