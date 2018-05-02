@@ -37,5 +37,6 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="game2D/lib/lwjgl3/lwjgl-stb"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/joml/joml-1.9.9.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
