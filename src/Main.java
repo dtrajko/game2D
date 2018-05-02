@@ -55,6 +55,7 @@ public class Main {
 		
 		while (!GLFW.glfwWindowShouldClose(window)) {
 			
+			// Keyboard events
 			if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_A) == GL11.GL_TRUE) {
 				x -= 0.0005f;
 			}
@@ -71,6 +72,7 @@ public class Main {
 				GLFW.glfwSetWindowShouldClose(window, true);
 			}
 
+			// Mouse events
 			if (GLFW.glfwGetMouseButton(window, 0) == GL11.GL_TRUE) {
 				System.out.println("Left mouse button clicked.");
 			}
@@ -84,8 +86,11 @@ public class Main {
 			GLFW.glfwPollEvents();
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
-			texture.bind();
 			shader.bind();
+
+			shader.setUniform1f("sampler", 0);
+			texture.bind(0);
+
 			model.render();
 
 			GLFW.glfwSwapBuffers(window);

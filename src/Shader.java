@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 
 public class Shader {
@@ -36,6 +38,7 @@ public class Shader {
 		GL20.glAttachShader(program, fs);
 		
 		GL20.glBindAttribLocation(program, 0, "vertices");
+		GL20.glBindAttribLocation(program, 0, "textures");
 
 		GL20.glLinkProgram(program);
 		if (GL20.glGetProgrami(program, GL20.GL_LINK_STATUS) != 1) {
@@ -52,6 +55,13 @@ public class Shader {
 		}
 	}
 	
+	public void setUniform1f(String name, float value) {
+		int location = GL20.glGetUniformLocation(program, name);
+		if (location != -1) {
+			GL20.glUniform1f(location, value);
+		}
+	}
+
 	public void bind() {
 		GL20.glUseProgram(program);
 	}
