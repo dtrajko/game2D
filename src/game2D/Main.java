@@ -28,7 +28,28 @@ public class Main {
 		GL11.glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
 		
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+		float[] vertices = new float[] {
+			-0.5f,  0.5f, 0, // TOP LEFT     0
+			 0.5f,  0.5f, 0, // TOP RIGHT    1
+			 0.5f, -0.5f, 0, // BOTTOM RIGHT 2
+			-0.5f, -0.5f, 0, // BOTTOM LEFT  3
+		};
+
+		float[] tex_coords = new float[] {
+			0, 0,
+			1, 0,
+			1, 1,
+			0, 1,
+		};
+
+		int[] indices = new int[] {
+			0, 1, 2,
+			2, 3, 0
+		};
+
 		Texture texture = new Texture("./res/grass.png");
+		Model model = new Model(vertices, tex_coords, indices);
 
 		float x = 0.0f;
 		float y = 0.0f;
@@ -63,21 +84,9 @@ public class Main {
 
 			GLFW.glfwPollEvents();
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+
 			texture.bind();
-			GL11.glBegin(GL11.GL_QUADS);
-			// GL11.glColor4f(1, 0, 0, 1);
-			GL11.glTexCoord2f(0, 0);
-			GL11.glVertex2f(-0.1f + x,  0.15f + y);
-			// GL11.glColor4f(0, 1, 0, 1);
-			GL11.glTexCoord2f(1, 0);
-			GL11.glVertex2f( 0.1f + x,  0.15f + y);
-			// GL11.glColor4f(0, 0, 1, 1);
-			GL11.glTexCoord2f(1, 1);
-			GL11.glVertex2f( 0.1f + x, -0.15f + y);
-			// GL11.glColor4f(1, 1, 1, 1);
-			GL11.glTexCoord2f(0, 1);
-			GL11.glVertex2f(-0.1f + x, -0.15f + y);
-			GL11.glEnd();
+			model.render();
 
 			GLFW.glfwSwapBuffers(window);
 		}
