@@ -3,6 +3,7 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
+
 public class Main {
 
 	private static final int WIDTH = 1280;
