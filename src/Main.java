@@ -1,12 +1,10 @@
-package game2D;
-
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
 public class Main {
-	
+
 	private static final int WIDTH = 1280;
 	private static final int HEIGHT = 720;
 	
@@ -50,6 +48,7 @@ public class Main {
 
 		Texture texture = new Texture("./res/grass.png");
 		Model model = new Model(vertices, tex_coords, indices);
+		Shader shader = new Shader("shader");
 
 		float x = 0.0f;
 		float y = 0.0f;
@@ -86,6 +85,7 @@ public class Main {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
 			texture.bind();
+			shader.bind();
 			model.render();
 
 			GLFW.glfwSwapBuffers(window);
