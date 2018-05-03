@@ -1,8 +1,8 @@
+import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-import org.joml.*;
 
 public class Main {
 
@@ -29,10 +29,10 @@ public class Main {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 
 		float[] vertices = new float[] {
-			-0.5f,  0.5f, 0, // TOP LEFT     0
-			 0.5f,  0.5f, 0, // TOP RIGHT    1
-			 0.5f, -0.5f, 0, // BOTTOM RIGHT 2
-			-0.5f, -0.5f, 0, // BOTTOM LEFT  3
+				-0.5f,  0.5f, 0, // TOP LEFT     0
+				-0.5f, -0.5f, 0, // BOTTOM LEFT  1
+				0.5f, -0.5f, 0,  // BOTTOM RIGHT 2
+				0.5f,  0.5f, 0,  // TOP RIGHT    3
 		};
 
 		float[] tex_coords = new float[] {
@@ -47,51 +47,25 @@ public class Main {
 			2, 3, 0
 		};
 
-		Texture texture = new Texture("./res/grass.png");
+		Texture texture = new Texture("./res/head.png");
 		Model model = new Model(vertices, tex_coords, indices);
 		Shader shader = new Shader("shader");
-
-		float x = 0.0f;
-		float y = 0.0f;
+		Matrix4f projection = new Matrix4f().ortho2D(-WIDTH/2, WIDTH/2, HEIGHT/2, -HEIGHT/2);
+		Matrix4f scale = new Matrix4f().scale(200);
+		Matrix4f target = new Matrix4f();
+		projection.mul(scale, target);
 		
 		while (!GLFW.glfwWindowShouldClose(window)) {
 			
-			// Keyboard events
-			if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_A) == GL11.GL_TRUE) {
-				x -= 0.0005f;
-			}
-			if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_D) == GL11.GL_TRUE) {
-				x += 0.0005f;
-			}
-			if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_W) == GL11.GL_TRUE) {
-				y += 0.0005f;
-			}
-			if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_S) == GL11.GL_TRUE) {
-				y -= 0.0005f;
-			}
-			if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_ESCAPE) == GL11.GL_TRUE) {
-				GLFW.glfwSetWindowShouldClose(window, true);
-			}
-
-			// Mouse events
-			if (GLFW.glfwGetMouseButton(window, 0) == GL11.GL_TRUE) {
-				System.out.println("Left mouse button clicked.");
-			}
-			if (GLFW.glfwGetMouseButton(window, 1) == GL11.GL_TRUE) {
-				System.out.println("Right mouse button clicked.");
-			}
-			if (GLFW.glfwGetMouseButton(window, 2) == GL11.GL_TRUE) {
-				System.out.println("Middle mouse button clicked.");
-			}
+			Input.handle(window);
 
 			GLFW.glfwPollEvents();
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
 			shader.bind();
-
-			shader.setUniform1f("sampler", 0);
+			shader.setUniform("sampler", 0);
+			shader.setUniform("projection", target);
 			texture.bind(0);
-
 			model.render();
 
 			GLFW.glfwSwapBuffers(window);

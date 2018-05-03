@@ -2,7 +2,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.FloatBuffer;
 
+import org.joml.Matrix4f;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 
@@ -17,19 +20,19 @@ public class Shader {
 		program = GL20.glCreateProgram();
 
 		vs = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
-		GL20.glShaderSource(vs, readFile(filename + ".vs"));
+		GL20.glShaderSource(vs, readFile(filename + "_vs.glsl"));
 		GL20.glCompileShader(vs);
 		if (GL20.glGetShaderi(vs, GL20.GL_COMPILE_STATUS) != 1) {
-			System.err.println("Failed to compile vertex shader ./shaders/" + filename + ".vs");
+			System.err.println("Failed to compile vertex shader ./shaders/" + filename + "_vs.glsl");
 			System.err.println(GL20.glGetShaderInfoLog(vs));
 			System.exit(1);
 		}
 
 		fs = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
-		GL20.glShaderSource(fs, readFile(filename + ".fs"));
+		GL20.glShaderSource(fs, readFile(filename + "_fs.glsl"));
 		GL20.glCompileShader(fs);
 		if (GL20.glGetShaderi(fs, GL20.GL_COMPILE_STATUS) != 1) {
-			System.err.println("Failed to compile fragment shader ./shaders/" + filename + ".fs");
+			System.err.println("Failed to compile fragment shader ./shaders/" + filename + "_fs.glsl");
 			System.err.println(GL20.glGetShaderInfoLog(fs));
 			System.exit(1);
 		}
@@ -55,10 +58,21 @@ public class Shader {
 		}
 	}
 	
-	public void setUniform1f(String name, float value) {
+	public void setUniform(String name, float value) {
 		int location = GL20.glGetUniformLocation(program, name);
 		if (location != -1) {
 			GL20.glUniform1f(location, value);
+			// System.out.println("Set value " + value + " to uniform " + name);
+		}
+	}
+
+	public void setUniform(String name, Matrix4f value) {
+		int location = GL20.glGetUniformLocation(program, name);
+		if (location != -1) {
+			FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
+			value.get(buffer);
+			GL20.glUniformMatrix4fv(location, false, buffer);
+			// System.out.println("Set value " + value + " to uniform " + name);
 		}
 	}
 
