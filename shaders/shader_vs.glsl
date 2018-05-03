@@ -9,6 +9,6 @@ uniform mat4 projection;
 
 void main() {
 	tex_coords = textures;
-	gl_Position = vec4(vertices, 1);
+	// gl_Position = vec4(vertices, 1);
 	gl_Position = projection * vec4(vertices, 1);
 }

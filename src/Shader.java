@@ -41,7 +41,7 @@ public class Shader {
 		GL20.glAttachShader(program, fs);
 		
 		GL20.glBindAttribLocation(program, 0, "vertices");
-		GL20.glBindAttribLocation(program, 0, "textures");
+		GL20.glBindAttribLocation(program, 1, "textures");
 
 		GL20.glLinkProgram(program);
 		if (GL20.glGetProgrami(program, GL20.GL_LINK_STATUS) != 1) {

@@ -21,7 +21,6 @@ public class Texture {
 			 height = bi.getHeight();
 			 int[] pixels_raw = new int[width * height];
 			 pixels_raw = bi.getRGB(0, 0, width, height, null, 0, width);
-			 
 			 ByteBuffer pixels = BufferUtils.createByteBuffer(width * height * 4);
 			 
 			 for (int i = 0; i < width; i++) {
@@ -33,15 +32,15 @@ public class Texture {
 					 pixels.put((byte)((pixel >> 24) & 0xFF)); // ALPHA
 				 }
 			 }
-			 
+
 			 pixels.flip();
 			 
 			 id = GL11.glGenTextures();
 			 GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
-			 GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-			 GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+			 GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+			 GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 			 GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixels);
-			 
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

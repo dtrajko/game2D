@@ -37,20 +37,20 @@ public class Main {
 
 		float[] tex_coords = new float[] {
 			0, 0,
-			1, 0,
-			1, 1,
 			0, 1,
+			1, 1,
+			1, 0,
 		};
 
 		int[] indices = new int[] {
-			0, 1, 2,
-			2, 3, 0
+			0, 1, 3, // top left triangle
+			3, 1, 2  // bottom right triangle
 		};
 
 		Texture texture = new Texture("./res/head.png");
 		Model model = new Model(vertices, tex_coords, indices);
 		Shader shader = new Shader("shader");
-		Matrix4f projection = new Matrix4f().ortho2D(-WIDTH/2, WIDTH/2, HEIGHT/2, -HEIGHT/2);
+		Matrix4f projection = new Matrix4f().ortho2D(-WIDTH/2, WIDTH/2, -HEIGHT/2, HEIGHT/2);
 		Matrix4f scale = new Matrix4f().scale(200);
 		Matrix4f target = new Matrix4f();
 		projection.mul(scale, target);
