@@ -1,4 +1,5 @@
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -46,29 +47,59 @@ public class Main {
 			0, 1, 3, // top left triangle
 			3, 1, 2  // bottom right triangle
 		};
+		
+		Camera camera = new Camera(WIDTH, HEIGHT);
 
 		Texture texture = new Texture("./res/head.png");
 		Model model = new Model(vertices, tex_coords, indices);
 		Shader shader = new Shader("shader");
-		Matrix4f projection = new Matrix4f().ortho2D(-WIDTH/2, WIDTH/2, -HEIGHT/2, HEIGHT/2);
-		Matrix4f scale = new Matrix4f().scale(200);
+
+		Matrix4f scale = new Matrix4f()
+				.translate(new Vector3f(100, 0, 0))
+				.scale(0.5f);
 		Matrix4f target = new Matrix4f();
-		projection.mul(scale, target);
+		
+		camera.setPosition(new Vector3f(-99.5f, 0, 0));
+
+		double frame_cap = 1.0 / 60.0;
+		double frame_time = 0;
+		int frames = 0;
+		double time = Timer.getTime();
+		double unprocessed = 0;
 		
 		while (!GLFW.glfwWindowShouldClose(window)) {
 			
-			Input.handle(window);
+			boolean can_render = false;
+			double time_2 = Timer.getTime();
+			double passed = time_2 - time;
+			unprocessed += passed;
+			frame_time += passed;
+			time = time_2;
+			
+			while (unprocessed >= frame_cap) {
+				unprocessed -= frame_cap;
+				can_render = true;
+				target = scale;
+				Input.handle(window);
+				GLFW.glfwPollEvents();
+				if (frame_time >= 1.0) {
+					frame_time = 0;
+					// System.out.println("FPS: " + frames);
+					frames = 0;
+				}
+			}
+			
+			if (can_render) {
 
-			GLFW.glfwPollEvents();
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-
-			shader.bind();
-			shader.setUniform("sampler", 0);
-			shader.setUniform("projection", target);
-			texture.bind(0);
-			model.render();
-
-			GLFW.glfwSwapBuffers(window);
+				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+				shader.bind();
+				shader.setUniform("sampler", 0);
+				shader.setUniform("projection", camera.getProjection().mul(target));
+				model.render();
+				texture.bind(0);
+				GLFW.glfwSwapBuffers(window);
+				frames++;
+			}
 		}
 		
 		GLFW.glfwTerminate();
