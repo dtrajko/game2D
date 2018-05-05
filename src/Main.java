@@ -9,21 +9,16 @@ public class Main {
 
 	private static final int WIDTH = 1280;
 	private static final int HEIGHT = 720;
-	
+	private static final String TITLE = "Java / LWJGL3 Game";
+
 	public Main() {
 		if ( !GLFW.glfwInit()) {
 			System.out.println("Unable to initialize GLFW");
 			System.exit(-1);
 		}
-		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
-		long window = GLFW.glfwCreateWindow(WIDTH, HEIGHT, "The 2D game based on Java and LWJGL3", 0, 0);
-		if (window == 0) {
-			throw new IllegalStateException("Failed to create window!");
-		}
-		GLFWVidMode videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
-		GLFW.glfwSetWindowPos(window, (videoMode.width() - WIDTH) / 2, (videoMode.height() - HEIGHT) / 2);
-		GLFW.glfwShowWindow(window);
-		GLFW.glfwMakeContextCurrent(window);
+
+		Window window = new Window(WIDTH, HEIGHT, TITLE);
+		
 		GL.createCapabilities();
 		GL11.glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
 		
@@ -47,8 +42,8 @@ public class Main {
 			0, 1, 3, // top left triangle
 			3, 1, 2  // bottom right triangle
 		};
-		
-		Camera camera = new Camera(WIDTH, HEIGHT);
+
+		Camera camera = new Camera(window.getWidth(), window.getHeight());
 
 		Texture texture = new Texture("./res/head.png");
 		Model model = new Model(vertices, tex_coords, indices);
@@ -67,7 +62,7 @@ public class Main {
 		double time = Timer.getTime();
 		double unprocessed = 0;
 		
-		while (!GLFW.glfwWindowShouldClose(window)) {
+		while (!window.shouldClose()) {
 			
 			boolean can_render = false;
 			double time_2 = Timer.getTime();
@@ -80,8 +75,22 @@ public class Main {
 				unprocessed -= frame_cap;
 				can_render = true;
 				target = scale;
-				Input.handle(window);
-				GLFW.glfwPollEvents();
+
+				if (window.getInput().isKeyPressed(GLFW.GLFW_KEY_Q)) {
+					System.out.println("Key Q pressed!");
+				}
+				if (window.getInput().isKeyReleased(GLFW.GLFW_KEY_Q)) {
+					System.out.println("Key Q released!");
+				}
+				if (window.getInput().isMouseButtonPressed(GLFW.GLFW_MOUSE_BUTTON_1)) {
+					System.out.println("Mouse button pressed!");
+				}
+				if (window.getInput().isMouseButtonReleased(GLFW.GLFW_MOUSE_BUTTON_1)) {
+					System.out.println("Mouse button released!");
+				}
+
+				window.getInput().handle(window.getWindow());
+				window.update();
 				if (frame_time >= 1.0) {
 					frame_time = 0;
 					// System.out.println("FPS: " + frames);
@@ -97,7 +106,7 @@ public class Main {
 				shader.setUniform("projection", camera.getProjection().mul(target));
 				model.render();
 				texture.bind(0);
-				GLFW.glfwSwapBuffers(window);
+				window.swapBuffers();
 				frames++;
 			}
 		}
