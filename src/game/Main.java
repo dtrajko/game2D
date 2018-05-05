@@ -1,9 +1,18 @@
+package game;
+
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
+
+import io.Timer;
+import io.Window;
+import render.Camera;
+import render.Model;
+import render.Shader;
+import render.Texture;
 
 public class Main {
 
