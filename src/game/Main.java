@@ -39,11 +39,11 @@ public class Main {
 		Camera camera = new Camera(window.getWidth(), window.getHeight());
 		Shader shader = new Shader("shader");
 
-		World world = new World(32, 32, 26);
+		World world = new World(32, 24, 26);
 		world.setTile(Tile.wall_tile, 0, 0);
-		world.setTile(Tile.wall_tile, 0, 31);
+		world.setTile(Tile.wall_tile, 0, 23);
 		world.setTile(Tile.wall_tile, 31, 0);
-		world.setTile(Tile.wall_tile, 31, 31);
+		world.setTile(Tile.wall_tile, 31, 23);
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 
@@ -93,7 +93,7 @@ public class Main {
 
 				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
-				world.render(tileRenderer, shader, camera);
+				world.render(tileRenderer, shader, camera, window);
 
 				window.swapBuffers();
 				frames++;

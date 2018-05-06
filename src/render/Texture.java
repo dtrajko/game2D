@@ -52,7 +52,10 @@ public class Texture {
 			GL13.glActiveTexture(GL13.GL_TEXTURE0 + sampler);
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
 		}
-		
 	}
-
+	
+	protected void finalize() throws Throwable {
+		GL11.glDeleteTextures(id);
+		super.finalize();
+	}
 }

@@ -8,6 +8,7 @@ import java.nio.FloatBuffer;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 
 public class Shader {
@@ -100,5 +101,14 @@ public class Shader {
 			e.printStackTrace();
 		}
 		return string.toString();
+	}
+
+	protected void finalize() throws Throwable {
+		GL20.glDetachShader(program, vs);
+		GL20.glDetachShader(program, fs);
+		GL20.glDeleteShader(vs);
+		GL20.glDeleteShader(fs);
+		GL20.glDeleteProgram(program);		
+		super.finalize();
 	}
 }
