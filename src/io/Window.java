@@ -11,10 +11,10 @@ public class Window {
 	private String title;
 	private Input input;
 	
-	public Window(int width, int height, String title) {
+	public Window(int width, int height, String title, boolean fullscreen) {
 		setSize(width, height); // default values
 		this.title = title;
-		setFullscreen(false);
+		setFullscreen(fullscreen);
 		createWindow();
 	}
 

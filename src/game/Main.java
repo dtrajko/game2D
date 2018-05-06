@@ -13,12 +13,16 @@ import render.Camera;
 import render.Model;
 import render.Shader;
 import render.Texture;
+import world.Tile;
+import world.TileRenderer;
+import world.World;
 
 public class Main {
 
 	private static final int WIDTH = 1280;
 	private static final int HEIGHT = 720;
 	private static final String TITLE = "Java / LWJGL3 Game";
+	private static final boolean FULLSCREEN = false;
 
 	public Main() {
 		if ( !GLFW.glfwInit()) {
@@ -26,46 +30,24 @@ public class Main {
 			System.exit(-1);
 		}
 
-		Window window = new Window(WIDTH, HEIGHT, TITLE);
+		Window window = new Window(WIDTH, HEIGHT, TITLE, FULLSCREEN);
 		
 		GL.createCapabilities();
 		GL11.glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
 		
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-
-		float[] vertices = new float[] {
-				-0.5f,  0.5f, 0, // TOP LEFT     0
-				-0.5f, -0.5f, 0, // BOTTOM LEFT  1
-				0.5f, -0.5f, 0,  // BOTTOM RIGHT 2
-				0.5f,  0.5f, 0,  // TOP RIGHT    3
-		};
-
-		float[] tex_coords = new float[] {
-			0, 0,
-			0, 1,
-			1, 1,
-			1, 0,
-		};
-
-		int[] indices = new int[] {
-			0, 1, 3, // top left triangle
-			3, 1, 2  // bottom right triangle
-		};
-
+		TileRenderer tileRenderer = new TileRenderer();
 		Camera camera = new Camera(window.getWidth(), window.getHeight());
-
-		Texture texture = new Texture("./res/head.png");
-		Model model = new Model(vertices, tex_coords, indices);
 		Shader shader = new Shader("shader");
 
-		Matrix4f scale = new Matrix4f()
-				.translate(new Vector3f(100, 0, 0))
-				.scale(0.5f);
-		Matrix4f target = new Matrix4f();
-		
-		camera.setPosition(new Vector3f(-99.5f, 0, 0));
+		World world = new World(32, 32, 26);
+		world.setTile(Tile.wall_tile, 0, 0);
+		world.setTile(Tile.wall_tile, 0, 31);
+		world.setTile(Tile.wall_tile, 31, 0);
+		world.setTile(Tile.wall_tile, 31, 31);
 
-		double frame_cap = 1.0 / 60.0;
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+		double frame_cap = 1.0 / 120.0;
 		double frame_time = 0;
 		int frames = 0;
 		double time = Timer.getTime();
@@ -83,22 +65,22 @@ public class Main {
 			while (unprocessed >= frame_cap) {
 				unprocessed -= frame_cap;
 				can_render = true;
-				target = scale;
 
-				if (window.getInput().isKeyPressed(GLFW.GLFW_KEY_Q)) {
-					System.out.println("Key Q pressed!");
+				if (window.getInput().isKeyDown(GLFW.GLFW_KEY_A)) {
+					camera.getPosition().sub(new Vector3f(-2f, 0, 0));
 				}
-				if (window.getInput().isKeyReleased(GLFW.GLFW_KEY_Q)) {
-					System.out.println("Key Q released!");
+				if (window.getInput().isKeyDown(GLFW.GLFW_KEY_D)) {
+					camera.getPosition().sub(new Vector3f(2f, 0, 0));
 				}
-				if (window.getInput().isMouseButtonPressed(GLFW.GLFW_MOUSE_BUTTON_1)) {
-					System.out.println("Mouse button pressed!");
+				if (window.getInput().isKeyDown(GLFW.GLFW_KEY_W)) {
+					camera.getPosition().sub(new Vector3f(0, 2f, 0));
 				}
-				if (window.getInput().isMouseButtonReleased(GLFW.GLFW_MOUSE_BUTTON_1)) {
-					System.out.println("Mouse button released!");
+				if (window.getInput().isKeyDown(GLFW.GLFW_KEY_S)) {
+					camera.getPosition().sub(new Vector3f(0, -2f, 0));
 				}
 
 				window.getInput().handle(window.getWindow());
+				world.correctCamera(camera, window);
 				window.update();
 				if (frame_time >= 1.0) {
 					frame_time = 0;
@@ -110,11 +92,9 @@ public class Main {
 			if (can_render) {
 
 				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-				shader.bind();
-				shader.setUniform("sampler", 0);
-				shader.setUniform("projection", camera.getProjection().mul(target));
-				model.render();
-				texture.bind(0);
+
+				world.render(tileRenderer, shader, camera);
+
 				window.swapBuffers();
 				frames++;
 			}

@@ -17,7 +17,7 @@ public class Texture {
 	public Texture(String filename) {
 		
 		try {
-			 BufferedImage bi = ImageIO.read(new File(filename));
+			 BufferedImage bi = ImageIO.read(new File("./res/textures/" + filename + ".png"));
 			 width  = bi.getWidth();
 			 height = bi.getHeight();
 			 int[] pixels_raw = new int[width * height];
