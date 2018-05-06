@@ -47,6 +47,11 @@ public class Model {
 		GL20.glVertexAttribPointer(1, 2, GL11.GL_FLOAT, false, 0, 0);
 
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, i_id);
+
+		// enable transparency
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc (GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
 		GL11.glDrawElements(GL11.GL_TRIANGLES, draw_count, GL11.GL_UNSIGNED_INT, 0);
 
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);

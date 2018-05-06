@@ -31,6 +31,18 @@ public class World {
 		this.world = matrix;
 	}
 
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public int getScale() {
+		return scale;
+	}
+
 	public void render(TileRenderer renderer, Shader shader, Camera camera, Window window) {
 		/*
 		for (int i = 0; i < height; i++) {
@@ -54,9 +66,6 @@ public class World {
 	public void correctCamera(Camera camera, Window window) {
 
 		Vector3f pos = camera.getPosition();
-		
-		// System.out.println("Cam pos: " + "X=" + pos.x + " Y=" + pos.y + " Z=" + pos.z);
-		// System.out.println("Width: " + (int)width + " Height: " + (int)height + " Scale: " + (int)scale);
 
 		int w = -width * scale * 2;
 		int h = height * scale * 2;

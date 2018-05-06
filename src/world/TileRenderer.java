@@ -18,27 +18,8 @@ public class TileRenderer {
 	public TileRenderer() {
 
 		tile_textures = new HashMap<String, Texture>();
-		
-		float[] vertices = new float[] {
-				-1f,  1f, 0, // TOP LEFT     0
-				-1f, -1f, 0, // BOTTOM LEFT  1
-				 1f, -1f, 0, // BOTTOM RIGHT 2
-				 1f,  1f, 0, // TOP RIGHT    3
-		};
 
-		float[] tex_coords = new float[] {
-			0, 0,
-			0, 1,
-			1, 1,
-			1, 0,
-		};
-
-		int[] indices = new int[] {
-			0, 1, 3, // top left triangle
-			3, 1, 2  // bottom right triangle
-		};
-		
-		this.model = new Model(vertices, tex_coords, indices);
+		this.model = new Model(Sprite.getVertices(), Sprite.getTexCoords(), Sprite.getIndices());
 		
 		for (int i = 0; i < Tile.tiles.length; i++) {
 			if (Tile.tiles[i] != null) {

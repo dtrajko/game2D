@@ -7,6 +7,7 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
+import entities.Player;
 import io.Timer;
 import io.Window;
 import render.Camera;
@@ -40,10 +41,8 @@ public class Main {
 		Shader shader = new Shader("shader");
 
 		World world = new World(32, 24, 26);
-		world.setTile(Tile.wall_tile, 0, 0);
-		world.setTile(Tile.wall_tile, 0, 23);
-		world.setTile(Tile.wall_tile, 31, 0);
-		world.setTile(Tile.wall_tile, 31, 23);
+		
+		Player player = new Player(new Vector3f(26, -32, 0), new Vector3f(26, 26, 0));
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 
@@ -66,34 +65,25 @@ public class Main {
 				unprocessed -= frame_cap;
 				can_render = true;
 
-				if (window.getInput().isKeyDown(GLFW.GLFW_KEY_A)) {
-					camera.getPosition().sub(new Vector3f(-2f, 0, 0));
-				}
-				if (window.getInput().isKeyDown(GLFW.GLFW_KEY_D)) {
-					camera.getPosition().sub(new Vector3f(2f, 0, 0));
-				}
-				if (window.getInput().isKeyDown(GLFW.GLFW_KEY_W)) {
-					camera.getPosition().sub(new Vector3f(0, 2f, 0));
-				}
-				if (window.getInput().isKeyDown(GLFW.GLFW_KEY_S)) {
-					camera.getPosition().sub(new Vector3f(0, -2f, 0));
-				}
-
 				window.getInput().handle(window.getWindow());
+
+				player.update((float)frame_cap * 10, window, camera, world);
 				world.correctCamera(camera, window);
 				window.update();
+
 				if (frame_time >= 1.0) {
 					frame_time = 0;
 					// System.out.println("FPS: " + frames);
 					frames = 0;
 				}
 			}
-			
+
 			if (can_render) {
 
 				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
 				world.render(tileRenderer, shader, camera, window);
+				player.render(shader, camera);
 
 				window.swapBuffers();
 				frames++;
