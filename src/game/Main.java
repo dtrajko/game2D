@@ -52,7 +52,15 @@ public class Main {
 		world.setTile(Tile.tile_wall, 17, 15);
 		world.setTile(Tile.tile_wall, 18, 15);
 		world.setTile(Tile.tile_wall, 14, 14);
+		world.setTile(Tile.tile_wall, 14, 13);
+		world.setTile(Tile.tile_wall, 16, 13);
 		world.setTile(Tile.tile_wall, 18, 14);
+		world.setTile(Tile.tile_wall, 18, 13);
+		world.setTile(Tile.tile_wall, 17, 13);
+		world.setTile(Tile.tile_wall, 14, 12);
+		world.setTile(Tile.tile_wall, 14, 11);
+		world.setTile(Tile.tile_wall, 16, 12);
+		world.setTile(Tile.tile_wall, 16, 11);
 
 		Player player = new Player(new Vector3f(26, -32, 0), new Vector3f(26, 26, 0));
 
