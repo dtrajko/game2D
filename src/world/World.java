@@ -76,6 +76,8 @@ public class World {
 		}
 	}
 
+	public Matrix4f getWorldMatrix() { return this.world; }
+
 	public void setMatrix(Matrix4f matrix) {
 		this.world = matrix;
 	}

@@ -9,7 +9,9 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
 import collision.AABB;
+import entities.Entity;
 import entities.Player;
+import entities.Transform;
 import io.Timer;
 import io.Window;
 import render.Camera;
@@ -42,12 +44,14 @@ public class Main {
 		GL11.glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
 		
 		TileRenderer tileRenderer = new TileRenderer();
+		Entity.initAsset();
+
 		Camera camera = new Camera(window.getWidth(), window.getHeight());
 		Shader shader = new Shader("shader");
 
 		World world = new World("level_01", 26);
 
-		Player player = new Player(new Vector3f(26, -32, 0), new Vector3f(26, 26, 0));
+		Player player = new Player(new Transform());
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 
@@ -88,13 +92,14 @@ public class Main {
 				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
 				world.render(tileRenderer, shader, camera, window);
-				player.render(shader, camera);
+				player.render(shader, camera, world);
 
 				window.swapBuffers();
 				frames++;
 			}
 		}
 		
+		Entity.deleteAsset();
 		GLFW.glfwTerminate();
 	}
 
