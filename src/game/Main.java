@@ -1,12 +1,14 @@
 package game;
 
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
+import collision.AABB;
 import entities.Player;
 import io.Timer;
 import io.Window;
@@ -23,9 +25,12 @@ public class Main {
 	private static final int WIDTH = 1280;
 	private static final int HEIGHT = 720;
 	private static final String TITLE = "Java / LWJGL3 Game";
-	private static final boolean FULLSCREEN = true;
+	private static final boolean FULLSCREEN = false;
 
 	public Main() {
+		
+		Window.setCallbacks();
+
 		if ( !GLFW.glfwInit()) {
 			System.out.println("Unable to initialize GLFW");
 			System.exit(-1);
@@ -40,8 +45,15 @@ public class Main {
 		Camera camera = new Camera(window.getWidth(), window.getHeight());
 		Shader shader = new Shader("shader");
 
-		World world = new World(32, 24, 26);
-		
+		World world = new World(40, 30, 26);
+		world.setTile(Tile.tile_wall, 14, 15);
+		world.setTile(Tile.tile_wall, 15, 15);
+		world.setTile(Tile.tile_wall, 16, 15);
+		world.setTile(Tile.tile_wall, 17, 15);
+		world.setTile(Tile.tile_wall, 18, 15);
+		world.setTile(Tile.tile_wall, 14, 14);
+		world.setTile(Tile.tile_wall, 18, 14);
+
 		Player player = new Player(new Vector3f(26, -32, 0), new Vector3f(26, 26, 0));
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);

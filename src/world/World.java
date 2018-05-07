@@ -1,8 +1,10 @@
 package world;
 
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import collision.AABB;
 import io.Window;
 import render.Camera;
 import render.Shader;
@@ -11,7 +13,7 @@ public class World {
 	private final int view_width = 26;
 	private final int view_height = 16;
 	private int[] tiles;
-	
+	private AABB[] bounding_boxes;
 	private int width;
 	private int height;
 	private int scale;
@@ -23,6 +25,7 @@ public class World {
 		this.height = height; // 16
 		this.scale = scale; // 16
 		tiles = new int[width * height];
+		bounding_boxes = new AABB[width * height];
 		world = new Matrix4f().setTranslation(new Vector3f(0));
 		world.scale(scale);
 	}
@@ -44,13 +47,6 @@ public class World {
 	}
 
 	public void render(TileRenderer renderer, Shader shader, Camera camera, Window window) {
-		/*
-		for (int i = 0; i < height; i++) {
-			for (int j = 0; j < width; j++) {
-				renderer.renderTile(tiles[j + i * width], j, -i, shader, world, camera);
-			}
-		}
-		*/
 		int posX = ((int) camera.getPosition().x + (window.getWidth() / 2)) / (scale * 2);
 		int posY = ((int) camera.getPosition().y - (window.getHeight() / 2)) / (scale * 2);
 		for (int i = 0; i < view_width; i++) {
@@ -86,8 +82,10 @@ public class World {
 
 	public void setTile(Tile tile, int x, int y) {
 		tiles[x + y * width] = tile.getId();
+		bounding_boxes[x + y * width] = tile.isSolid() ?
+			new AABB(new Vector2f(x * 2, -y * 2), new Vector2f(1, 1)) : null;
 	}
-	
+
 	public Tile getTile(int x, int y) {
 		try {
 			return Tile.tiles[tiles[x + y * width]];
@@ -96,4 +94,11 @@ public class World {
 		}
 	}
 
+	public AABB getTileBoundingBox(int x, int y) {
+		try {
+			return bounding_boxes[x + y * width];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return null;
+		}
+	}
 }

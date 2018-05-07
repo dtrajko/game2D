@@ -11,7 +11,7 @@ public class Input {
 	public Input(long window) {
 		this.window = window;
 		this.keys = new boolean[GLFW.GLFW_KEY_LAST];
-		for (int k = 0; k < GLFW.GLFW_KEY_LAST; k++) {
+		for (int k = 32; k < GLFW.GLFW_KEY_LAST; k++) {
 			this.keys[k] = false;
 		}
 		this.buttons = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
@@ -45,7 +45,7 @@ public class Input {
 	}
 
 	public void update() {
-		for (int k = 0; k < GLFW.GLFW_KEY_LAST; k++) {
+		for (int k = 32; k < GLFW.GLFW_KEY_LAST; k++) {
 			this.keys[k] = isKeyDown(k);
 		}
 		for (int mb = 0; mb < GLFW.GLFW_MOUSE_BUTTON_LAST; mb++) {
