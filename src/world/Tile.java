@@ -2,12 +2,13 @@ package world;
 
 public class Tile {
 
-	public static Tile tiles[] = new Tile[16];
+	public static Tile tiles[] = new Tile[16]; // range of RGB color channels
 	public static byte not = 0; // number of tiles
 	private boolean solid;
 
-	public static final Tile tile_grass = new Tile("grass");
-	public static final Tile tile_wall = new Tile("wall").setSolid();
+	public static final Tile tile_00 = new Tile("grass_light");
+	public static final Tile tile_01 = new Tile("stone").setSolid();
+	public static final Tile tile_02 = new Tile("wall").setSolid();
 
 	private byte id;
 	private String texture;
@@ -29,7 +30,7 @@ public class Tile {
 	}
 
 	public boolean isSolid() { return solid; }
-	public int getId() { return id; }
+	public byte getId() { return id; }
 	public String getTexture() { return texture; }
 	
 }

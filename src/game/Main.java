@@ -45,22 +45,7 @@ public class Main {
 		Camera camera = new Camera(window.getWidth(), window.getHeight());
 		Shader shader = new Shader("shader");
 
-		World world = new World(40, 30, 26);
-		world.setTile(Tile.tile_wall, 14, 15);
-		world.setTile(Tile.tile_wall, 15, 15);
-		world.setTile(Tile.tile_wall, 16, 15);
-		world.setTile(Tile.tile_wall, 17, 15);
-		world.setTile(Tile.tile_wall, 18, 15);
-		world.setTile(Tile.tile_wall, 14, 14);
-		world.setTile(Tile.tile_wall, 14, 13);
-		world.setTile(Tile.tile_wall, 16, 13);
-		world.setTile(Tile.tile_wall, 18, 14);
-		world.setTile(Tile.tile_wall, 18, 13);
-		world.setTile(Tile.tile_wall, 17, 13);
-		world.setTile(Tile.tile_wall, 14, 12);
-		world.setTile(Tile.tile_wall, 14, 11);
-		world.setTile(Tile.tile_wall, 16, 12);
-		world.setTile(Tile.tile_wall, 16, 11);
+		World world = new World("level_01", 26);
 
 		Player player = new Player(new Vector3f(26, -32, 0), new Vector3f(26, 26, 0));
 

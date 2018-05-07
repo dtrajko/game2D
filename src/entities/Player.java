@@ -86,7 +86,7 @@ public class Player {
 			}			
 		}
 
-		camera.getPosition().lerp(this.transform.position.mul(-world.getScale(), new Vector3f()), 0.03f);
+		camera.getPosition().lerp(this.transform.position.mul(-world.getScale(), new Vector3f()), 0.02f);
 		// camera.setPosition(this.transform.position.mul(-world.getScale(), new Vector3f()));
 		correctPosition(window, world);
 	}

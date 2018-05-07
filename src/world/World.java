@@ -1,5 +1,11 @@
 package world;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -12,7 +18,7 @@ import render.Shader;
 public class World {
 	private final int view_width = 26;
 	private final int view_height = 16;
-	private int[] tiles;
+	private byte[] tiles;
 	private AABB[] bounding_boxes;
 	private int width;
 	private int height;
@@ -23,11 +29,51 @@ public class World {
 	public World(int width, int height, int scale) {
 		this.width = width;   // 16
 		this.height = height; // 16
-		this.scale = scale; // 16
-		tiles = new int[width * height];
+		this.scale = scale;   // 16
+		tiles = new byte[width * height];
 		bounding_boxes = new AABB[width * height];
-		world = new Matrix4f().setTranslation(new Vector3f(0));
-		world.scale(scale);
+		this.world = new Matrix4f().setTranslation(new Vector3f(0));
+		this.world.scale(scale);
+	}
+	
+	public World(String worldName, int scale) {
+		try {
+			BufferedImage tile_sheet = ImageIO.read(new File("./res/levels/" + worldName + "/tiles.png"));
+			// BufferedImage entity_sheet = ImageIO.read(new File("./res/levels/" + worldName + "/entity.png"));
+			this.width = tile_sheet.getWidth();
+			this.height = tile_sheet.getHeight();
+			this.scale = scale;
+			int[] colorTileSheet = tile_sheet.getRGB(0, 0, width, height, null, 0, width);
+			this.tiles = new byte[width * height];
+			this.bounding_boxes = new AABB[width * height];
+			this.world = new Matrix4f().setTranslation(new Vector3f(0));
+			this.world.scale(scale);
+			for (int y = 0; y < height; y++) {
+				for (int x = 0; x < width; x++) {
+					int red = (colorTileSheet[x + y * width] >> 16) & 0xFF;
+
+					/*
+					if (red == 255) red = 0;
+					System.out.print(red);
+					if (x == width - 1) System.out.println();
+					*/
+
+					Tile tile;
+					try {
+						tile = Tile.tiles[red];
+					} catch (ArrayIndexOutOfBoundsException e) {
+						tile = null;
+						// tile = Tile.tiles[0];
+					}
+					if (tile != null) {
+						setTile(tile, x, y);						
+					}
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void setMatrix(Matrix4f matrix) {
