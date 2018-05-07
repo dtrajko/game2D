@@ -9,7 +9,7 @@ import render.Shader;
 
 public class World {
 	private final int view_width = 26;
-	private final int view_height = 15;
+	private final int view_height = 16;
 	private int[] tiles;
 	
 	private int width;

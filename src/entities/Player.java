@@ -4,6 +4,7 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 import io.Window;
+import render.Animation;
 import render.Camera;
 import render.Model;
 import render.Shader;
@@ -14,12 +15,14 @@ import world.World;
 public class Player {
 
 	private Model model;
-	private Texture texture;
+	// private Texture texture;
+	private Animation texture;
 	private Transform transform;
 
 	public Player() {
 		this.model = new Model(Sprite.getVertices(), Sprite.getTexCoords(), Sprite.getIndices());
-		this.texture = new Texture("player");
+		// this.texture = new Texture("player_shadow");
+		this.texture = new Animation(4, 8, "vulin");
 		this.transform = new Transform();
 	}
 
