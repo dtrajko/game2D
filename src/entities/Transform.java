@@ -14,14 +14,13 @@ public class Transform {
 	}
 
 	public Transform(Vector3f position, Vector3f scale) {
-		position = position;
-		scale = scale;
+		this.position = position;
+		this.scale = scale;
 	}
 
 	public Matrix4f getProjection(Matrix4f target) {
-		target.scale(scale);
 		target.translate(position);
+		target.scale(scale);
 		return target;
-	}
-	
+	}	
 }

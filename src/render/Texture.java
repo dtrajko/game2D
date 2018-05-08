@@ -16,8 +16,9 @@ public class Texture {
 	
 	public Texture(String filename) {
 		
+		String filePath = "./res/textures/" + filename + ".png";
 		try {
-			 BufferedImage bi = ImageIO.read(new File("./res/textures/" + filename + ".png"));
+			 BufferedImage bi = ImageIO.read(new File(filePath));
 			 width  = bi.getWidth();
 			 height = bi.getHeight();
 			 int[] pixels_raw = new int[width * height];
@@ -43,6 +44,7 @@ public class Texture {
 			 GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixels);
 
 		} catch (IOException e) {
+			System.err.println("Failed to load texture '" + filePath + "'");
 			e.printStackTrace();
 		}
 	}

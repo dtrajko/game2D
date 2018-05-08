@@ -3,8 +3,6 @@ package entities;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.lwjgl.glfw.GLFW;
-
 import collision.AABB;
 import collision.Collision;
 import io.Window;
@@ -12,18 +10,16 @@ import render.Animation;
 import render.Camera;
 import render.Model;
 import render.Shader;
-import render.Texture;
 import world.Sprite;
-import world.Tile;
 import world.World;
 
-public class Entity {
+public abstract class Entity {
 
-	private static Model model;
-	private AABB bounding_box;
+	protected static Model model;
+	protected AABB bounding_box;
 	// private Texture texture;
-	private Animation texture;
-	private Transform transform;
+	protected Animation texture;
+	protected Transform transform;
 
 	public Entity(Animation animation, Transform transform) {
 		// this.texture = new Texture("player_shadow");
@@ -38,8 +34,8 @@ public class Entity {
 		transform.position.add(new Vector3f(direction, 0));
 		bounding_box.getCenter().set(transform.position.x, transform.position.y);
 	}
-
-	public void update(float delta, Window window, Camera camera, World world) {
+	
+	public void collideWithTiles(World world) {
 		AABB[] boxes = new AABB[25];
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
@@ -69,10 +65,24 @@ public class Entity {
 				transform.position.set(bounding_box.getCenter(), 0);
 			}			
 		}
-		camera.getPosition().lerp(this.transform.position.mul(-world.getScale(), new Vector3f()), 0.02f);
-		// camera.setPosition(this.transform.position.mul(-world.getScale(), new Vector3f()));
-		correctPosition(window, world);
 	}
+
+	public void collideWithEntity(Entity entity) {
+		Collision collision = this.bounding_box.getCollision(entity.bounding_box);
+		if (collision.isIntersecting) {
+
+			collision.distance.x /= 2;
+			collision.distance.y /= 2;
+
+			this.bounding_box.correctPosition(entity.bounding_box, collision);
+			this.transform.position.set(this.bounding_box.getCenter().x, this.bounding_box.getCenter().y, 0);
+			
+			entity.bounding_box.correctPosition(this.bounding_box, collision);
+			entity.transform.position.set(entity.bounding_box.getCenter().x, entity.bounding_box.getCenter().y, 0);
+		}
+	}
+
+	public abstract void update(float delta, Window window, Camera camera, World world);
 
 	public void correctPosition(Window window, World world) {
 

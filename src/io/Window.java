@@ -58,6 +58,10 @@ public class Window {
 		GLFW.glfwSwapBuffers(window);
 	}
 
+	public void setTitle(String title) {
+		GLFW.glfwSetWindowTitle(window, title);
+	}
+
 	public void setSize(int width, int height) {
 		this.width = width;
 		this.height = height;

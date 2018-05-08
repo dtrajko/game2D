@@ -1,24 +1,13 @@
 package game;
 
-import org.joml.Matrix4f;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-
-import collision.AABB;
 import entities.Entity;
-import entities.Player;
-import entities.Transform;
 import io.Timer;
 import io.Window;
 import render.Camera;
-import render.Model;
 import render.Shader;
-import render.Texture;
-import world.Tile;
 import world.TileRenderer;
 import world.World;
 
@@ -28,6 +17,7 @@ public class Main {
 	private static final int HEIGHT = 720;
 	private static final String TITLE = "Java / LWJGL3 Game";
 	private static final boolean FULLSCREEN = false;
+	private static int FPS = 0;
 
 	public Main() {
 		
@@ -46,18 +36,14 @@ public class Main {
 		TileRenderer tileRenderer = new TileRenderer();
 		Entity.initAsset();
 
-		Camera camera = new Camera(window.getWidth(), window.getHeight());
 		Shader shader = new Shader("shader");
-
+		Camera camera = new Camera(window.getWidth(), window.getHeight());
 		World world = new World("level_01", 26);
-
-		Player player = new Player(new Transform());
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 
 		double frame_cap = 1.0 / 120.0;
 		double frame_time = 0;
-		int frames = 0;
 		double time = Timer.getTime();
 		double unprocessed = 0;
 		
@@ -76,14 +62,15 @@ public class Main {
 
 				window.getInput().handle(window.getWindow());
 
-				player.update((float)frame_cap * 10, window, camera, world);
+				world.update((float)frame_cap * 10, window, camera);
 				world.correctCamera(camera, window);
 				window.update();
 
 				if (frame_time >= 1.0) {
 					frame_time = 0;
-					// System.out.println("FPS: " + frames);
-					frames = 0;
+					// System.out.println("FPS: " + Main.FPS);
+					window.setTitle(TITLE + " | FPS: " + Main.FPS);
+					Main.FPS = 0;
 				}
 			}
 
@@ -92,10 +79,9 @@ public class Main {
 				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
 				world.render(tileRenderer, shader, camera, window);
-				player.render(shader, camera, world);
 
 				window.swapBuffers();
-				frames++;
+				Main.FPS++;
 			}
 		}
 		
