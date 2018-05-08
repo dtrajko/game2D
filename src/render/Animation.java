@@ -19,7 +19,7 @@ public class Animation {
 		this.fps = 1.0 / (double) fps;
 		this.frames = new Texture[amount];
 		for (int i = 0; i < amount; i++) {
-			this.frames[i] = new Texture("anim/" + filename + "_" + i);
+			this.frames[i] = new Texture(filename + "/" + i);
 		}
 	}
 
@@ -30,7 +30,7 @@ public class Animation {
 		this.elapsedTime += this.currentTime - this.lastTime;
 		
 		if (this.elapsedTime >= fps) {
-			this.elapsedTime -= fps;
+			this.elapsedTime = 0;
 			this.pointer++;
 		}
 

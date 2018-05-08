@@ -18,16 +18,32 @@ public abstract class Entity {
 	protected static Model model;
 	protected AABB bounding_box;
 	// private Texture texture;
-	protected Animation texture;
 	protected Transform transform;
+	protected Animation[] animations;
+	private int max_animations;
+	private int use_animation;
 
-	public Entity(Animation animation, Transform transform) {
-		// this.texture = new Texture("player_shadow");
-		this.texture = animation;
+	public Entity(int max_animations, Transform transform) {
+		this.max_animations = max_animations;
+		this.animations = new Animation[this.max_animations];
+		this.use_animation = 0;
 		this.transform = transform;
 		this.bounding_box = new AABB(
 			new Vector2f(transform.position.x, transform.position.y), 
 			new Vector2f(this.transform.scale.x, this.transform.scale.y));
+	}
+	
+	public void setAnimation(int index, Animation animation) {
+		try {
+			this.animations[index] = animation;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			System.err.println("Index is out of boundaries (max_animations=" + this.max_animations + ")");
+			e.printStackTrace();
+		}
+	}
+	
+	public void useAnimation(int index) {
+		this.use_animation = index;
 	}
 
 	public void move(Vector2f direction) {
@@ -108,7 +124,7 @@ public abstract class Entity {
 		shader.bind();
 		shader.setUniform("sampler", 0);
 		shader.setUniform("projection", this.transform.getProjection(target));
-		texture.bind(0);
+		this.animations[this.use_animation].bind(0);
 		model.render();
 	}
 	

@@ -9,18 +9,25 @@ import render.Camera;
 import world.World;
 
 public class Player extends Entity {
+	
+	public static final int ANIM_IDLE = 0;
+	public static final int ANIM_WALK = 1;
+	public static final int ANIM_SIZE = 2;
 
 	public Player() {
 		this(new Transform());
 	}
 
 	public Player(Transform transform) {
-		super(new Animation(4, 4, "vulin"), transform);
+		super(ANIM_SIZE, transform);
+		this.setAnimation(ANIM_IDLE, new Animation(4, 10, "player/idle"));
+		this.setAnimation(ANIM_WALK, new Animation(4, 10, "player/walking"));
 	}
 
 	@Override
 	public void update(float delta, Window window, Camera camera, World world) {
 		Vector2f movement = new Vector2f();
+
 		if (window.getInput().isKeyDown(GLFW.GLFW_KEY_A)) {
 			movement.add(-delta, 0);
 		}
@@ -32,6 +39,12 @@ public class Player extends Entity {
 		}
 		if (window.getInput().isKeyDown(GLFW.GLFW_KEY_S)) {
 			movement.add(0, -delta);
+		}
+
+		if (movement.x != 0 || movement.y != 0) {
+			this.useAnimation(ANIM_WALK);
+		} else {
+			this.useAnimation(ANIM_IDLE);
 		}
 
 		move(movement);

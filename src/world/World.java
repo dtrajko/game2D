@@ -5,19 +5,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.imageio.ImageIO;
-
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-
 import collision.AABB;
 import entities.Entity;
 import entities.Player;
 import entities.Transform;
 import io.Window;
-import render.Animation;
 import render.Camera;
 import render.Shader;
 
@@ -43,22 +39,29 @@ public class World {
 		this.world.scale(scale);
 	}
 	
-	public World(String worldName, int scale) {
+	public World(String worldName, Camera camera, int scale) {
 		try {
 			BufferedImage tile_sheet = ImageIO.read(new File("./res/levels/" + worldName + "/tiles.png"));
-			// BufferedImage entity_sheet = ImageIO.read(new File("./res/levels/" + worldName + "/entity.png"));
+			BufferedImage entity_sheet = ImageIO.read(new File("./res/levels/" + worldName + "/entities.png"));
 			this.width = tile_sheet.getWidth();
 			this.height = tile_sheet.getHeight();
 			this.scale = scale;
 			int[] colorTileSheet = tile_sheet.getRGB(0, 0, width, height, null, 0, width);
+			int[] colorEntitySheet = entity_sheet.getRGB(0, 0, width, height, null, 0, width);
 			this.tiles = new byte[width * height];
 			this.bounding_boxes = new AABB[width * height];
 			this.entities = new ArrayList<Entity>();
 			this.world = new Matrix4f().setTranslation(new Vector3f(0));
 			this.world.scale(scale);
+			
+			Transform transform;
+			
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
+
 					int red = (colorTileSheet[x + y * width] >> 16) & 0xFF;
+					int entity_index = (colorEntitySheet[x + y * width] >> 16) & 0xFF;
+					int entity_alpha = (colorEntitySheet[x + y * width] >> 24) & 0xFF;
 
 					Tile tile;
 					try {
@@ -69,23 +72,23 @@ public class World {
 					if (tile != null) {
 						setTile(tile, x, y);						
 					}
+					
+					if (entity_alpha > 0) {
+						transform = new Transform();
+						transform.position.x = x * 2;
+						transform.position.y = -y * 2;
+						switch (entity_index) {
+							case 1:
+								Player player = new Player(transform);
+								entities.add(player);
+								camera.getPosition().set(transform.position.mul(-scale, new Vector3f()));
+								break;
+							default:
+								break;
+						}
+					}
 				}
 			}
-
-			// TODO finish level loader
-			entities.add(new Player(new Transform()));
-			entities.add(new Entity(new Animation(1, 1, "tank"), new Transform(new Vector3f(12, -4, 0), new Vector3f(1, 1, 0))) {
-				@Override
-				public void update(float delta, Window window, Camera camera, World world) {
-					move(new Vector2f(0.15f * delta, 0));
-				}
-			});
-			entities.add(new Entity(new Animation(1, 1, "tank"), new Transform(new Vector3f(6, -11, 0), new Vector3f(1, 1, 0))) {
-				@Override
-				public void update(float delta, Window window, Camera camera, World world) {
-					move(new Vector2f(0.15f * delta, 0));
-				}
-			});
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
