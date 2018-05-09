@@ -38,7 +38,7 @@ public class Main {
 
 		Shader shader = new Shader("shader");
 		Camera camera = new Camera(window.getWidth(), window.getHeight());
-		World world = new World("level_01", camera, 52);
+		World world = new World("level_01", camera, 26);
 		world.calculateView(window);
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);

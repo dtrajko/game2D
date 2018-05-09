@@ -47,11 +47,11 @@ public class Player extends Entity {
 		}
 		this.previous_height = this.transform.position.y;
 
-		if (window.getInput().isKeyDown(GLFW.GLFW_KEY_A)) {
+		if (window.getInput().isKeyDown(GLFW.GLFW_KEY_A) || window.getInput().isKeyDown(GLFW.GLFW_KEY_LEFT)) {
 			movement.add(-delta, 0);
 			this.useAnimation(ANIM_WALK);
 		}
-		if (window.getInput().isKeyDown(GLFW.GLFW_KEY_D)) {
+		if (window.getInput().isKeyDown(GLFW.GLFW_KEY_D) || window.getInput().isKeyDown(GLFW.GLFW_KEY_RIGHT)) {
 			movement.add(delta, 0);
 			this.useAnimation(ANIM_WALK);
 		}
