@@ -38,7 +38,8 @@ public class Main {
 
 		Shader shader = new Shader("shader");
 		Camera camera = new Camera(window.getWidth(), window.getHeight());
-		World world = new World("level_01", camera, 26);
+		World world = new World("level_01", camera, 52);
+		world.calculateView(window);
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 
@@ -57,11 +58,14 @@ public class Main {
 			time = time_2;
 			
 			while (unprocessed >= frame_cap) {
+				if (window.hasResized()) {
+					camera.setProjection(window.getWidth(), window.getHeight());
+					world.calculateView(window);
+					GL11.glViewport(0, 0, window.getWidth(), window.getHeight());
+				}
 				unprocessed -= frame_cap;
 				can_render = true;
-
 				window.getInput().handle(window.getWindow());
-
 				world.update((float)frame_cap * 10, window, camera);
 				world.correctCamera(camera, window);
 				window.update();
@@ -78,7 +82,7 @@ public class Main {
 
 				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
-				world.render(tileRenderer, shader, camera, window);
+				world.render(tileRenderer, shader, camera);
 
 				window.swapBuffers();
 				Main.FPS++;

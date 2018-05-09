@@ -18,8 +18,8 @@ import render.Camera;
 import render.Shader;
 
 public class World {
-	private final int view_width = 26;
-	private final int view_height = 16;
+	private int view_width = 26;
+	private int view_height = 16;
 	private byte[] tiles;
 	private AABB[] bounding_boxes;
 	private List<Entity> entities;
@@ -95,6 +95,11 @@ public class World {
 			e.printStackTrace();
 		}
 	}
+	
+	public void calculateView(Window window) {
+		this.view_width = window.getWidth() / (scale * 2) + 2;
+		this.view_height = window.getHeight() / (scale * 2) + 4;
+	}
 
 	public Matrix4f getWorldMatrix() { return this.world; }
 
@@ -114,14 +119,14 @@ public class World {
 		return scale;
 	}
 
-	public void render(TileRenderer renderer, Shader shader, Camera camera, Window window) {
-		int posX = ((int) camera.getPosition().x + (window.getWidth() / 2)) / (scale * 2);
-		int posY = ((int) camera.getPosition().y - (window.getHeight() / 2)) / (scale * 2);
+	public void render(TileRenderer renderer, Shader shader, Camera camera) {
+		int posX = (int)camera.getPosition().x / (scale * 2);
+		int posY = (int)camera.getPosition().y / (scale * 2);
 		for (int i = 0; i < view_width; i++) {
 			for (int j = 0; j < view_height; j++) {
-				Tile tile = getTile(i - posX, j + posY);
+				Tile tile = getTile(i - posX - (this.view_width / 2) + 1, j + posY - (this.view_height / 2));
 				if (tile != null) {
-					renderer.renderTile(tile, i - posX, -j - posY, shader, world, camera);
+					renderer.renderTile(tile, i - posX - (this.view_width / 2) + 1, -j - posY + (this.view_height / 2), shader, world, camera);
 				}
 			}
 		}

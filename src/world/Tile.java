@@ -6,9 +6,11 @@ public class Tile {
 	public static byte not = 0; // number of tiles
 	private boolean solid;
 
-	public static final Tile tile_00 = new Tile("grass_light");
+	public static final Tile tile_00 = new Tile("brick_wall");
 	public static final Tile tile_01 = new Tile("stone").setSolid();
 	public static final Tile tile_02 = new Tile("wall").setSolid();
+	public static final Tile tile_03 = new Tile("lava");
+	public static final Tile tile_04 = new Tile("door");
 
 	private byte id;
 	private String texture;
