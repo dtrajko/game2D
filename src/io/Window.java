@@ -3,6 +3,8 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.glfw.Callbacks;
 
 public class Window {
@@ -14,6 +16,7 @@ public class Window {
 	private boolean fullscreen;
 	private boolean hasResized;
 	private GLFWWindowSizeCallback windowSizeCallback;
+	private GLFWVidMode videoMode;
 
 	public Window(int width, int height, String title, boolean fullscreen) {
 		setSize(width, height); // default values
@@ -24,14 +27,14 @@ public class Window {
 	}
 
 	public void createWindow() {
-		// GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
+		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
 		window = GLFW.glfwCreateWindow(width, height, this.title, 
 			fullscreen ? GLFW.glfwGetPrimaryMonitor() : 0, 0);
 		if (window == 0) {
 			throw new IllegalStateException("Failed to create window!");
 		}
 		if (!fullscreen) {
-			GLFWVidMode videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
+			videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
 			GLFW.glfwSetWindowPos(window, (videoMode.width() - width) / 2, (videoMode.height() - height) / 2);
 			GLFW.glfwShowWindow(window);
 		}
@@ -98,4 +101,8 @@ public class Window {
 	public boolean hasResized() { return this.hasResized; }
 	public boolean isFullscreen() { return this.fullscreen; }
 	public Input getInput() { return this.input; }
+
+	public void toggleFullscreen() {
+
+	}
 }

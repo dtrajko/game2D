@@ -71,6 +71,9 @@ public class Player extends Entity {
 		if (window.getInput().isKeyReleased(GLFW.GLFW_KEY_SPACE)) {
 			this.subsequent_jumps = 0;
 		}
+		if (window.getInput().isKeyPressed(GLFW.GLFW_KEY_F) || window.getInput().isKeyPressed(GLFW.GLFW_KEY_ENTER)) {
+			window.toggleFullscreen();
+		}
 
 		move(movement);
 		collideWithTiles(world);

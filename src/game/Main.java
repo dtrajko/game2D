@@ -3,7 +3,10 @@ package game;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
+
+import assets.Assets;
 import entities.Entity;
+import gui.Gui;
 import io.Timer;
 import io.Window;
 import render.Camera;
@@ -34,12 +37,14 @@ public class Main {
 		GL11.glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
 		
 		TileRenderer tileRenderer = new TileRenderer();
-		Entity.initAsset();
+		Assets.initAsset();
 
 		Shader shader = new Shader("shader");
 		Camera camera = new Camera(window.getWidth(), window.getHeight());
 		World world = new World("level_01", camera, 26);
 		world.calculateView(window);
+		
+		Gui gui = new Gui(window);
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 
@@ -60,6 +65,7 @@ public class Main {
 			while (unprocessed >= frame_cap) {
 				if (window.hasResized()) {
 					camera.setProjection(window.getWidth(), window.getHeight());
+					gui.resizeCamera(window);
 					world.calculateView(window);
 					GL11.glViewport(0, 0, window.getWidth(), window.getHeight());
 				}
@@ -83,13 +89,14 @@ public class Main {
 				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
 				world.render(tileRenderer, shader, camera);
+				gui.render();
 
 				window.swapBuffers();
 				Main.FPS++;
 			}
 		}
-		
-		Entity.deleteAsset();
+
+		Assets.deleteAsset();
 		GLFW.glfwTerminate();
 	}
 

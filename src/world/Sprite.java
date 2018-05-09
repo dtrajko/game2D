@@ -1,7 +1,7 @@
 package world;
 
 public class Sprite {
-	
+
 	private static final float[] vertices = new float[] {
 			-1f,  1f, 0, // TOP LEFT     0
 			-1f, -1f, 0, // BOTTOM LEFT  1

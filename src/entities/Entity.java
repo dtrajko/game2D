@@ -3,6 +3,8 @@ package entities;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+
+import assets.Assets;
 import collision.AABB;
 import collision.Collision;
 import io.Window;
@@ -10,7 +12,6 @@ import render.Animation;
 import render.Camera;
 import render.Model;
 import render.Shader;
-import world.Sprite;
 import world.World;
 
 public abstract class Entity {
@@ -125,14 +126,6 @@ public abstract class Entity {
 		shader.setUniform("sampler", 0);
 		shader.setUniform("projection", this.transform.getProjection(target));
 		this.animations[this.use_animation].bind(0);
-		model.render();
-	}
-	
-	public static void initAsset() {
-		model = new Model(Sprite.getVertices(), Sprite.getTexCoords(), Sprite.getIndices());
-	}
-
-	public static void deleteAsset() {
-		model = null;
+		Assets.getModel().render();
 	}
 }

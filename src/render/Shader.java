@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.FloatBuffer;
 
 import org.joml.Matrix4f;
+import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL15;
@@ -59,7 +60,7 @@ public class Shader {
 			System.exit(1);
 		}
 	}
-	
+
 	public void setUniform(String name, float value) {
 		int location = GL20.glGetUniformLocation(program, name);
 		if (location != -1) {
@@ -75,6 +76,15 @@ public class Shader {
 			value.get(buffer);
 			GL20.glUniformMatrix4fv(location, false, buffer);
 			// System.out.println("Set value " + value + " to uniform " + name);
+		}
+	}
+
+	public void setUniform(String name, Vector4f value) {
+		int location = GL20.glGetUniformLocation(program, name);
+		if (location != -1) {
+			FloatBuffer buffer = BufferUtils.createFloatBuffer(4);
+			value.get(buffer);
+			GL20.glUniform4fv(location, buffer);
 		}
 	}
 
@@ -111,4 +121,5 @@ public class Shader {
 		GL20.glDeleteProgram(program);		
 		super.finalize();
 	}
+
 }
