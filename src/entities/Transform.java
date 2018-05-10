@@ -13,6 +13,11 @@ public class Transform {
 		scale = new Vector3f(1, 1, 1);
 	}
 
+	public Transform(Vector3f position, float scale) {
+		this.position = position;
+		this.scale = new Vector3f(scale, scale, scale);
+	}
+
 	public Transform(Vector3f position, Vector3f scale) {
 		this.position = position;
 		this.scale = scale;

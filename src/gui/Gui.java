@@ -4,6 +4,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
 import assets.Assets;
+import entities.Transform;
 import io.Window;
 import render.Camera;
 import render.Shader;
@@ -15,6 +16,12 @@ public class Gui {
 	private Camera camera;
 	private TileSheet sheet;
 
+	public Gui(TileSheet sheet, Window window) {
+		this.shader = new Shader("gui");
+		this.camera = new Camera(window.getWidth(), window.getHeight());
+		this.sheet = sheet;
+	}
+
 	public Gui(Window window) {
 		this.shader = new Shader("gui");
 		this.camera = new Camera(window.getWidth(), window.getHeight());
@@ -25,13 +32,13 @@ public class Gui {
 		camera.setProjection(window.getWidth(), window.getHeight());
 	}
 
-	public void render() {
-		Matrix4f projectionMatrix = new Matrix4f();
-		camera.getProjection().scale(50, projectionMatrix);
+	public void render(Transform transform, int tileIndex) {
+		Matrix4f projectionMatrix = camera.getProjection();
+		projectionMatrix.translate(transform.position);
+		projectionMatrix.scale(transform.scale);
 		shader.bind();
 		shader.setUniform("projection", projectionMatrix);
-		// shader.setUniform("color", new Vector4f(1, 0, 1, 0.5f));
-		sheet.bindTile(shader, 0, 0); // 0, 0 - tile location in sheet
+		sheet.bindTile(shader, tileIndex);
 		Assets.getModel().render();
 	}
 }

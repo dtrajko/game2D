@@ -7,9 +7,11 @@ public class TileSheet {
 	private Texture texture;
 	private Matrix4f scale;
 	private Matrix4f translation;
+	private int amountOfTiles;
 
 	public TileSheet(String textureName, int amountOfTiles) {
 		this.texture = new Texture("sheets/" + textureName);
+		this.amountOfTiles = amountOfTiles;
 		this.scale = new Matrix4f().scale(1.0f / (float)amountOfTiles);
 		this.translation = new Matrix4f();
 	}
@@ -19,5 +21,11 @@ public class TileSheet {
 		shader.setUniform("sampler", 0);
 		shader.setUniform("texModifier", translation);
 		this.texture.bind(0);
+	}
+
+	public void bindTile(Shader shader, int tile) {
+		int x = tile % amountOfTiles;
+		int y = tile / amountOfTiles;
+		bindTile(shader, x, y);
 	}
 }

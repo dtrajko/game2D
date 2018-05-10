@@ -1,16 +1,19 @@
 package game;
 
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
 import assets.Assets;
 import entities.Entity;
+import entities.Transform;
 import gui.Gui;
 import io.Timer;
 import io.Window;
 import render.Camera;
 import render.Shader;
+import render.TileSheet;
 import world.TileRenderer;
 import world.World;
 
@@ -44,7 +47,11 @@ public class Main {
 		World world = new World("level_01", camera, 26);
 		world.calculateView(window);
 		
-		Gui gui = new Gui(window);
+		TileSheet sheet = new TileSheet("lives", 3);
+		Gui gui = new Gui(sheet, window);
+		Transform heart_01_pos = new Transform(new Vector3f(-590, -320, 0), 30);
+		Transform heart_02_pos = new Transform(new Vector3f(-530, -320, 0), 30);
+		Transform heart_03_pos = new Transform(new Vector3f(-470, -320, 0), 30);
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 
@@ -65,7 +72,7 @@ public class Main {
 			while (unprocessed >= frame_cap) {
 				if (window.hasResized()) {
 					camera.setProjection(window.getWidth(), window.getHeight());
-					gui.resizeCamera(window);
+					// life.resizeCamera(window);
 					world.calculateView(window);
 					GL11.glViewport(0, 0, window.getWidth(), window.getHeight());
 				}
@@ -89,7 +96,9 @@ public class Main {
 				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
 				world.render(tileRenderer, shader, camera);
-				gui.render();
+				gui.render(heart_01_pos, 0);
+				gui.render(heart_02_pos, 0);
+				gui.render(heart_03_pos, 0);
 
 				window.swapBuffers();
 				Main.FPS++;
