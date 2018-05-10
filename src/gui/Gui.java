@@ -1,6 +1,7 @@
 package gui;
 
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 import assets.Assets;
@@ -15,6 +16,7 @@ public class Gui {
 	private Shader shader;
 	private Camera camera;
 	private TileSheet sheet;
+	private Button tmpButton;
 
 	public Gui(TileSheet sheet, Window window) {
 		this.shader = new Shader("gui");
@@ -25,11 +27,16 @@ public class Gui {
 	public Gui(Window window) {
 		this.shader = new Shader("gui");
 		this.camera = new Camera(window.getWidth(), window.getHeight());
-		this.sheet = new TileSheet("test", 3);
+		this.sheet = new TileSheet("gui", 9);
+		this.tmpButton = new Button(new Vector2f(0, 0), new Vector2f(96, 32));
 	}
 
 	public void resizeCamera(Window window) {
 		camera.setProjection(window.getWidth(), window.getHeight());
+	}
+
+	public void render() {
+		this.tmpButton.render(camera, sheet, shader);
 	}
 
 	public void render(Transform transform, int tileIndex) {
