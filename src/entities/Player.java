@@ -3,6 +3,8 @@ package entities;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
+
+import game.Game;
 import io.Window;
 import render.Animation;
 import render.Camera;
@@ -33,7 +35,7 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public void update(float delta, Window window, Camera camera, World world) {
+	public void update(float delta, Window window, Camera camera, World world, Game game) {
 
 		this.useAnimation(ANIM_IDLE);
 		Vector2f movement = new Vector2f();
@@ -73,6 +75,12 @@ public class Player extends Entity {
 		}
 		if (window.getInput().isKeyPressed(GLFW.GLFW_KEY_F) || window.getInput().isKeyPressed(GLFW.GLFW_KEY_ENTER)) {
 			window.toggleFullscreen();
+		}
+		if (window.getInput().isKeyPressed(GLFW.GLFW_KEY_1)) {
+			game.setLevel(1);
+		}
+		if (window.getInput().isKeyPressed(GLFW.GLFW_KEY_2)) {
+			game.setLevel(2);
 		}
 
 		move(movement);

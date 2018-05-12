@@ -7,6 +7,7 @@ import org.joml.Vector3f;
 import assets.Assets;
 import collision.AABB;
 import collision.Collision;
+import game.Game;
 import io.Window;
 import render.Animation;
 import render.Camera;
@@ -99,7 +100,7 @@ public abstract class Entity {
 		}
 	}
 
-	public abstract void update(float delta, Window window, Camera camera, World world);
+	public abstract void update(float delta, Window window, Camera camera, World world, Game game);
 
 	public void correctPosition(Window window, World world) {
 
