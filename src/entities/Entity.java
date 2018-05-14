@@ -13,6 +13,7 @@ import render.Animation;
 import render.Camera;
 import render.Model;
 import render.Shader;
+import world.Tile;
 import world.World;
 
 public abstract class Entity {
@@ -52,7 +53,7 @@ public abstract class Entity {
 		transform.position.add(new Vector3f(direction, 0));
 		bounding_box.getCenter().set(transform.position.x, transform.position.y);
 	}
-	
+
 	public void collideWithTiles(World world) {
 		AABB[] boxes = new AABB[25];
 		for (int i = 0; i < 5; i++) {

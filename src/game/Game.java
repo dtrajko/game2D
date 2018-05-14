@@ -20,6 +20,7 @@ public class Game {
 	private static String title;
 	private static int FPS = 0;
 	private static int current_level = 1;
+	private static int TOTAL_LEVELS = 2;
 	private static World level;
 	private static Window window;
 	private static Camera camera;
@@ -132,8 +133,16 @@ public class Game {
 	}
 	
 	public void setLevel(int level) {
-		current_level = level;
-		this.switchLevel = true;
+		if (level < 1) level = 1;
+		if (level > TOTAL_LEVELS) level = 1; // TOTAL_LEVELS;
+		if (current_level != level) {
+			current_level = level;
+			this.switchLevel = true;			
+		}
+	}
+
+	public int getCurrentLevel() {
+		return current_level;
 	}
 
 	public World getLevel() {

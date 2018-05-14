@@ -8,6 +8,7 @@ import game.Game;
 import io.Window;
 import render.Animation;
 import render.Camera;
+import world.Tile;
 import world.World;
 
 public class Player extends Entity {
@@ -86,6 +87,30 @@ public class Player extends Entity {
 		move(movement);
 		collideWithTiles(world);
 		correctPosition(window, world);
-		camera.getPosition().lerp(this.transform.position.mul(-world.getScale(), new Vector3f()), 0.02f);
+		camera.getPosition().lerp(this.transform.position.mul(-world.getScale(), new Vector3f()), 0.02f);	
+		manageLevels(game, world);
+	}
+
+	public void manageLevels(Game game, World world) {
+		if (isNextLevel(world)) {
+			game.setLevel(game.getCurrentLevel() + 1);
+		} else if (isPreviousLevel(world)) {
+			// game.setLevel(game.getCurrentLevel() - 1);
+		}
+	}
+	
+	public Tile getCurrentTile(World world) {
+		int x = (int)(transform.position.x / 2);
+		int y = (int)(-transform.position.y / 2);
+		Tile tile = world.getTile(x, y);
+		return tile;
+	}
+
+	public boolean isNextLevel(World world) {
+		return getCurrentTile(world).isNextLevel();
+	}
+
+	public boolean isPreviousLevel(World world) {
+		return getCurrentTile(world).isPreviousLevel();
 	}
 }

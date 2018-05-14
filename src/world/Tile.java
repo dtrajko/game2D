@@ -6,6 +6,7 @@ public class Tile {
 	public static byte not = 0; // number of tiles
 	private boolean solid;
 	private boolean nextLevel;
+	private boolean previousLevel;
 
 	public static final Tile tile_0 = new Tile("brick_wall");
 	public static final Tile tile_1 = new Tile("stone").setSolid();
@@ -16,6 +17,7 @@ public class Tile {
 	public static final Tile tile_6 = new Tile("water");
 	public static final Tile tile_7 = new Tile("dirt").setSolid();
 	public static final Tile tile_8 = new Tile("dirt_grass").setSolid();
+	public static final Tile tile_9 = new Tile("door").setPreviousLevel();
 
 	private byte id;
 	private String texture;
@@ -41,9 +43,14 @@ public class Tile {
 		return this;
 	}
 
+	public Tile setPreviousLevel() {
+		this.previousLevel = true;
+		return this;
+	}
+
 	public boolean isSolid() { return solid; }
 	public boolean isNextLevel() { return nextLevel; }
+	public boolean isPreviousLevel() { return previousLevel; }
 	public byte getId() { return id; }
 	public String getTexture() { return texture; }
-	
 }

@@ -42,7 +42,27 @@ public class Window {
 		this.input = new Input(this.window);
 		setLocalCallbacks();
 	}
-	
+
+	public void switchWindow() {
+		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
+		long newWindow = GLFW.glfwCreateWindow(width, height, this.title, 
+			fullscreen ? GLFW.glfwGetPrimaryMonitor() : 0, 0);
+		if (newWindow == 0) {
+			throw new IllegalStateException("Failed to switch window!");
+		}
+		GLFW.glfwDestroyWindow(window);
+		window = newWindow;
+		if (!fullscreen) {
+			videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
+			GLFW.glfwSetWindowPos(window, (videoMode.width() - width) / 2, (videoMode.height() - height) / 2);
+			GLFW.glfwShowWindow(window);
+		}
+		GLFW.glfwMakeContextCurrent(window);
+		this.input = new Input(this.window);
+		setLocalCallbacks();
+		GL.createCapabilities();
+	}
+
 	public void cleanUp() {
 		this.windowSizeCallback.close();
 		// glfwFreeCallbacks(window);
@@ -103,6 +123,7 @@ public class Window {
 	public Input getInput() { return this.input; }
 
 	public void toggleFullscreen() {
-
+		fullscreen = true;
+		switchWindow();
 	}
 }
