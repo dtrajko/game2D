@@ -11,5 +11,4 @@ public class Collision {
 		this.distance = distance;
 		this.isIntersecting = isIntersecting;
 	}
-
 }

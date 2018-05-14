@@ -16,13 +16,15 @@ public class Player extends Entity {
 	public static final int ANIM_IDLE = 0;
 	public static final int ANIM_WALK = 1;
 	public static final int ANIM_SIZE = 2;
-	
+
 	private static final float GRAVITY = 0.08f;
 	private static final float JUMP_FORCE = 3f;
-	
+
 	private static boolean jump_allowed;
 	private static float previous_height;
 	private static int subsequent_jumps = 0;
+
+	private static int lives = 3;
 
 	public Player() {
 		this(new Transform());
@@ -88,6 +90,7 @@ public class Player extends Entity {
 		collideWithTiles(world);
 		correctPosition(window, world);
 		camera.getPosition().lerp(this.transform.position.mul(-world.getScale(), new Vector3f()), 0.02f);	
+		manageLives(game, world);
 		manageLevels(game, world);
 	}
 
@@ -112,5 +115,21 @@ public class Player extends Entity {
 
 	public boolean isPreviousLevel(World world) {
 		return getCurrentTile(world).isPreviousLevel();
+	}
+
+	public void manageLives(Game game, World world) {
+		if (previous_height == this.transform.position.y) {
+			return;
+		}
+		int y = (int)(-transform.position.y / 2);
+		if (y >= world.getHeight() - 1) {
+			lives--;
+			if (lives < 0) lives = 0;
+			game.setLevel(game.getCurrentLevel());
+		}
+	}
+
+	public int getLives() {
+		return lives;
 	}
 }

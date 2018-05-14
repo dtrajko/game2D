@@ -17,7 +17,7 @@ public class Main {
 	private static final boolean FULLSCREEN = true;
 
 	public Main() {
-		
+
 		Window.setCallbacks();
 
 		if ( !GLFW.glfwInit()) {

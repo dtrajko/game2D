@@ -114,11 +114,11 @@ public class Shader {
 	}
 
 	protected void finalize() throws Throwable {
-		GL20.glDetachShader(program, vs);
-		GL20.glDetachShader(program, fs);
-		GL20.glDeleteShader(vs);
-		GL20.glDeleteShader(fs);
-		GL20.glDeleteProgram(program);		
+		// GL20.glDetachShader(program, vs);
+		// GL20.glDetachShader(program, fs);
+		// GL20.glDeleteShader(vs);
+		// GL20.glDeleteShader(fs);
+		// GL20.glDeleteProgram(program);		
 		super.finalize();
 	}
 

@@ -39,11 +39,16 @@ public class Game {
 		Game.title = title;
 	}
 	
-	public void initGui() {
-		TileSheet sheet = new TileSheet("lives", 3);	
-		guis.put(new Gui(sheet, window), new Transform(new Vector3f(-590, -320, 0), 30));
-		guis.put(new Gui(sheet, window), new Transform(new Vector3f(-530, -320, 0), 30));
-		guis.put(new Gui(sheet, window), new Transform(new Vector3f(-470, -320, 0), 30));
+	public void updateGui() {
+		guis.clear();
+		TileSheet sheet = new TileSheet("lives", 3);
+		int lives_x = -590;
+		int lives_y = -320;
+		for (int i = 0; i < player.getLives(); i++) {
+			guis.put(new Gui(sheet, window), new Transform(new Vector3f(lives_x, lives_y, 0), 30));
+			System.out.println("Game updateGui guis size=" + guis.size() + " i=" + i + "player.lives=" + player.getLives());
+			lives_x += 60;
+		}
 	}
 
 	public void beginLevel() {
@@ -72,21 +77,19 @@ public class Game {
 		boolean can_render;
 		double passed;
 
-		while (!window.shouldClose()) {
+		while (!window.shouldClose() && !gameOver()) {
 
 			if (switchLevel == true) {
-				initGui();
 				beginLevel();
 				switchLevel = false;
 			}
-			
+
  			can_render = false;
 			time_2 = Timer.getTime();
 			passed = time_2 - time;
 			unprocessed += passed;
 			frame_time += passed;
 			time = time_2;
-			// System.out.println("WHILE loop SECTION 3");
 
 			while (unprocessed >= frame_cap) {
 				if (window.hasResized()) {
@@ -103,14 +106,12 @@ public class Game {
 
 				if (frame_time >= 1.0) {
 					frame_time = 0;
-					// System.out.println("FPS: " + Main.FPS);
 					window.setTitle(title + " | FPS: " + FPS);
 					FPS = 0;
 				}
 			}
 
 			if (can_render) {
-
 				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 				this.render();
 				for (Gui gui : guis.keySet()) {
@@ -119,9 +120,14 @@ public class Game {
 				window.swapBuffers();
 				Game.FPS++;
 			}
-			
-			// System.out.println("WHILE loop SECTION 6");
 		}
+	}
+
+	private boolean gameOver() {
+		if (player instanceof Player) {
+			return player.getLives() <= 0;
+		}
+		return false;
 	}
 
 	public void setPlayer(Player player) {
@@ -135,10 +141,8 @@ public class Game {
 	public void setLevel(int level) {
 		if (level < 1) level = 1;
 		if (level > TOTAL_LEVELS) level = 1; // TOTAL_LEVELS;
-		if (current_level != level) {
-			current_level = level;
-			this.switchLevel = true;			
-		}
+		current_level = level;
+		this.switchLevel = true;
 	}
 
 	public int getCurrentLevel() {
@@ -150,6 +154,7 @@ public class Game {
 	}
 
 	public void update(float frame_cap) {
+		updateGui();
 		level.update(frame_cap * 10, window, camera, this);
 		level.correctCamera(window, camera);
 	}
