@@ -14,7 +14,7 @@ public class Main {
 	private static final int WIDTH = 1280;
 	private static final int HEIGHT = 720;
 	private static final String TITLE = "Java / LWJGL3 Game";
-	private static final boolean FULLSCREEN = true;
+	private static final boolean FULLSCREEN = false;
 
 	public Main() {
 

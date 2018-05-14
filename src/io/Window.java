@@ -94,11 +94,11 @@ public class Window {
 	public long getWindow() {
 		return this.window;
 	}
-	
+
 	public boolean shouldClose() {
 		return GLFW.glfwWindowShouldClose(window);
 	}
-	
+
 	public void swapBuffers() {
 		GLFW.glfwSwapBuffers(window);
 	}

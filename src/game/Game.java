@@ -38,16 +38,15 @@ public class Game {
 		Game.renderer = renderer;
 		Game.title = title;
 	}
-	
+
 	public void updateGui() {
 		guis.clear();
 		TileSheet sheet = new TileSheet("lives", 3);
-		int lives_x = -590;
+		int lives_x = -600;
 		int lives_y = -320;
 		for (int i = 0; i < player.getLives(); i++) {
-			guis.put(new Gui(sheet, window), new Transform(new Vector3f(lives_x, lives_y, 0), 30));
-			System.out.println("Game updateGui guis size=" + guis.size() + " i=" + i + "player.lives=" + player.getLives());
-			lives_x += 60;
+			guis.put(new Gui(sheet, window), new Transform(new Vector3f(lives_x, lives_y, 0), 20));
+			lives_x += 45;
 		}
 	}
 

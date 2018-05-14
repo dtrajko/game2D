@@ -39,9 +39,9 @@ public class World {
 		this.world = new Matrix4f().setTranslation(new Vector3f(0));
 		this.world.scale(scale);
 	}
-	
+
 	public World(String worldName, Camera camera, int scale, int bg_tile, Game game) {
-		
+
 		String tileSheetPath = "./res/levels/" + worldName + "/tiles.png";
 		String entitySheetPath = "./res/levels/" + worldName + "/entities.png";
 		BufferedImage tile_sheet = null;
@@ -60,7 +60,7 @@ public class World {
 			System.out.println("Failed to load file '" + tileSheetPath + "'");
 			e.printStackTrace();
 		}
-			
+
 		this.width = tile_sheet.getWidth();
 		this.height = tile_sheet.getHeight();
 		this.scale = scale;
@@ -73,7 +73,7 @@ public class World {
 		this.world.scale(scale);
 
 		Transform transform;
-		
+
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				
@@ -111,7 +111,7 @@ public class World {
 			}
 		}
 	}
-	
+
 	public void calculateView(Window window) {
 		this.view_width = window.getWidth() / (scale * 2) + 2;
 		this.view_height = window.getHeight() / (scale * 2) + 4;

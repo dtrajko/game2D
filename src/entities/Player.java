@@ -12,19 +12,16 @@ import world.Tile;
 import world.World;
 
 public class Player extends Entity {
-	
+
 	public static final int ANIM_IDLE = 0;
 	public static final int ANIM_WALK = 1;
 	public static final int ANIM_SIZE = 2;
-
 	private static final float GRAVITY = 0.08f;
 	private static final float JUMP_FORCE = 3f;
-
 	private static boolean jump_allowed;
 	private static float previous_height;
 	private static int subsequent_jumps = 0;
-
-	private static int lives = 3;
+	private static int lives = 5;
 
 	public Player() {
 		this(new Transform());
@@ -101,7 +98,7 @@ public class Player extends Entity {
 			// game.setLevel(game.getCurrentLevel() - 1);
 		}
 	}
-	
+
 	public Tile getCurrentTile(World world) {
 		int x = (int)(transform.position.x / 2);
 		int y = (int)(-transform.position.y / 2);
