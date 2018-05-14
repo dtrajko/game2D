@@ -57,7 +57,7 @@ public class Texture {
 	}
 	
 	protected void finalize() throws Throwable {
-		GL11.glDeleteTextures(id);
+		// GL11.glDeleteTextures(id);
 		super.finalize();
 	}
 }

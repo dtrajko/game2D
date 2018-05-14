@@ -39,7 +39,7 @@ public class Main {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 
 		Game game = new Game(TITLE, window, camera, shader, renderer);
-		game.run();
+		game.loop();
 
 		Assets.deleteAsset();
 		GLFW.glfwTerminate();

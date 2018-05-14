@@ -31,7 +31,7 @@ public class Player extends Entity {
 		super(ANIM_SIZE, transform);
 		this.setAnimation(ANIM_IDLE, new Animation(4, 10, "player/idle"));
 		this.setAnimation(ANIM_WALK, new Animation(4, 10, "player/walking"));
-		this.previous_height = this.transform.position.y;		
+		previous_height = this.transform.position.y;		
 	}
 
 	@Override
@@ -42,12 +42,12 @@ public class Player extends Entity {
 
 		movement.add(0, -GRAVITY);
 		
-		if (this.transform.position.y >= this.previous_height) {
-			this.jump_allowed = true;
+		if (this.transform.position.y >= previous_height) {
+			jump_allowed = true;
 		} else {
-			this.jump_allowed = false;			
+			jump_allowed = false;			
 		}
-		this.previous_height = this.transform.position.y;
+		previous_height = this.transform.position.y;
 
 		if (window.getInput().isKeyDown(GLFW.GLFW_KEY_A) || window.getInput().isKeyDown(GLFW.GLFW_KEY_LEFT)) {
 			movement.add(-delta, 0);
@@ -65,21 +65,21 @@ public class Player extends Entity {
 			// movement.add(0, -delta);
 			// this.useAnimation(ANIM_WALK);
 		}
-		if (window.getInput().isKeyDown(GLFW.GLFW_KEY_SPACE) && this.jump_allowed) {
-			this.subsequent_jumps++;
-			movement.add(0, delta * (JUMP_FORCE / (this.subsequent_jumps * (GRAVITY * 2))));
+		if (window.getInput().isKeyDown(GLFW.GLFW_KEY_SPACE) && jump_allowed) {
+			subsequent_jumps++;
+			movement.add(0, delta * (JUMP_FORCE / (subsequent_jumps * (GRAVITY * 2))));
 			this.useAnimation(ANIM_WALK);
 		}
 		if (window.getInput().isKeyReleased(GLFW.GLFW_KEY_SPACE)) {
-			this.subsequent_jumps = 0;
+			subsequent_jumps = 0;
 		}
-		if (window.getInput().isKeyPressed(GLFW.GLFW_KEY_F) || window.getInput().isKeyPressed(GLFW.GLFW_KEY_ENTER)) {
+		if (window.getInput().isKeyReleased(GLFW.GLFW_KEY_F) || window.getInput().isKeyPressed(GLFW.GLFW_KEY_ENTER)) {
 			window.toggleFullscreen();
 		}
-		if (window.getInput().isKeyPressed(GLFW.GLFW_KEY_1)) {
+		if (window.getInput().isKeyReleased(GLFW.GLFW_KEY_1)) {
 			game.setLevel(1);
 		}
-		if (window.getInput().isKeyPressed(GLFW.GLFW_KEY_2)) {
+		if (window.getInput().isKeyReleased(GLFW.GLFW_KEY_2)) {
 			game.setLevel(2);
 		}
 
