@@ -1,7 +1,6 @@
 package assets;
 
 import render.Model;
-import world.Sprite;
 
 public class Assets {
 	
@@ -16,5 +15,4 @@ public class Assets {
 	public static void deleteAsset() {
 		model = null;
 	}
-
 }

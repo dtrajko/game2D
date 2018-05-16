@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
+import assets.Sprite;
 import render.Camera;
 import render.Model;
 import render.Shader;

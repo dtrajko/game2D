@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
+
+import assets.Cube;
 import entities.Player;
 import entities.Transform;
 import gui.Gui;
@@ -111,7 +113,8 @@ public class Game {
 			}
 
 			if (can_render) {
-				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+				// GL11.glEnable(GL11.GL_DEPTH_TEST);
+				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT|GL11.GL_DEPTH_BUFFER_BIT);
 				this.render();
 				for (Gui gui : guis.keySet()) {
 					gui.render(guis.get(gui), 0);

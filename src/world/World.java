@@ -9,6 +9,8 @@ import javax.imageio.ImageIO;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+
+import assets.Cube;
 import collision.AABB;
 import entities.Entity;
 import entities.Player;
@@ -27,8 +29,8 @@ public class World {
 	private int width;
 	private int height;
 	private int scale;
-
 	private Matrix4f world;
+	private Cube cube; // temporary
 
 	public World(int width, int height, int scale) {
 		this.width = width;   // 16
@@ -110,6 +112,8 @@ public class World {
 				}
 			}
 		}
+
+		cube = new Cube();
 	}
 
 	public void calculateView(Window window) {
@@ -146,9 +150,12 @@ public class World {
 				}
 			}
 		}
+
 		for (Entity entity : entities) {
 			entity.render(shader, camera, this);
 		}
+
+		cube.render(600, 400, 1, shader, world, camera);
 	}
 
 	public void update(float delta, Window window, Camera camera, Game game) {
