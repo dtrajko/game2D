@@ -19,7 +19,6 @@ import world.World;
 
 public class Game {
 
-	private static String title;
 	private static int FPS = 0;
 	private static int current_level = 1;
 	private static int TOTAL_LEVELS = 2;
@@ -33,12 +32,11 @@ public class Game {
 	private static Player player;
 	private static boolean switchLevel = true;
 
-	public Game(String title, Window window, Camera camera, Shader shader, TileRenderer renderer) {
+	public Game(Window window, Camera camera, Shader shader, TileRenderer renderer) {
 		Game.window = window;
 		Game.camera = camera;
 		Game.shader = shader;
 		Game.renderer = renderer;
-		Game.title = title;
 	}
 
 	public void updateGui() {
@@ -107,7 +105,7 @@ public class Game {
 
 				if (frame_time >= 1.0) {
 					frame_time = 0;
-					window.setTitle(title + " | FPS: " + FPS);
+					window.setTitle(Window.TITLE + " | FPS: " + FPS);
 					FPS = 0;
 				}
 			}
@@ -144,7 +142,7 @@ public class Game {
 		if (level < 1) level = 1;
 		if (level > TOTAL_LEVELS) level = 1; // TOTAL_LEVELS;
 		current_level = level;
-		this.switchLevel = true;
+		switchLevel = true;
 	}
 
 	public int getCurrentLevel() {

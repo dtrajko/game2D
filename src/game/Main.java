@@ -12,11 +12,6 @@ import world.TileRenderer;
 
 public class Main {
 
-	private static final int WIDTH = 1280;
-	private static final int HEIGHT = 720;
-	private static final String TITLE = "Java / LWJGL3 Game";
-	private static final boolean FULLSCREEN = false;
-
 	public Main() {
 
 		Window.setCallbacks();
@@ -26,7 +21,7 @@ public class Main {
 			System.exit(-1);
 		}
 
-		Window window = new Window(WIDTH, HEIGHT, TITLE, FULLSCREEN);
+		Window window = new Window();
 
 		GL.createCapabilities();
 		GL11.glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
@@ -39,7 +34,7 @@ public class Main {
 		
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 
-		Game game = new Game(TITLE, window, camera, shader, renderer);
+		Game game = new Game(window, camera, shader, renderer);
 		game.loop();
 
 		Assets.deleteAsset();
