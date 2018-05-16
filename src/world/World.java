@@ -155,7 +155,7 @@ public class World {
 			entity.render(shader, camera, this);
 		}
 
-		cube.render(600, 400, 1, shader, world, camera);
+		cube.render(5, -25, 1, shader, world, camera);
 	}
 
 	public void update(float delta, Window window, Camera camera, Game game) {

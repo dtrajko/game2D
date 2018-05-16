@@ -14,42 +14,42 @@ public class Cube {
 	private Texture texture;
 
 	private static final float[] vertices = new float[] {
-		-0.5f, 0.5f,-0.5f,
-		-0.5f,-0.5f,-0.5f,
-		 0.5f,-0.5f,-0.5f,
-		 0.5f, 0.5f,-0.5f,
+		-0.5f,  0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
 
-		-0.5f, 0.5f, 0.5f,
-		-0.5f,-0.5f, 0.5f,
-		 0.5f,-0.5f, 0.5f,
-		 0.5f, 0.5f, 0.5f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
 
-		 0.5f, 0.5f,-0.5f,
-		 0.5f,-0.5f,-0.5f,
-		 0.5f,-0.5f, 0.5f,
-		 0.5f, 0.5f, 0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
 
-		-0.5f, 0.5f,-0.5f,
-		-0.5f,-0.5f,-0.5f,
-		-0.5f,-0.5f, 0.5f,
-		-0.5f, 0.5f, 0.5f,
+		-0.5f,  0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
 
-		-0.5f, 0.5f, 0.5f,
-		-0.5f, 0.5f,-0.5f,
-		 0.5f, 0.5f,-0.5f,
-		 0.5f, 0.5f, 0.5f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f,  0.5f,
 
-		-0.5f,-0.5f, 0.5f,
-		-0.5f,-0.5f,-0.5f,
-		 0.5f,-0.5f,-0.5f,
-		 0.5f,-0.5f, 0.5f,
+		-0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f,  0.5f,
 	};
 
 	private static final float[] tex_coords = new float[] {
 		0, 0,
 		0, 1,
 		1, 1,
-		1, 0,		
+		1, 0,
 		0, 0,
 		0, 1,
 		1, 1,
@@ -113,15 +113,15 @@ public class Cube {
 	public void render(int x, int y, int z, Shader shader, Matrix4f world, Camera camera) {
 		shader.bind();
 		
-		texture.bind(0);
+		texture.bind(1);
 		
-		Matrix4f position = new Matrix4f().translate(new Vector3f(x * 2, y * 2, 0));
+		Matrix4f position = new Matrix4f().translate(new Vector3f(x * 2, y * 2, z * 2));
 		Matrix4f target = new Matrix4f();
 		
 		camera.getProjection().mul(world, target);
 		target.mul(position);
 
-		shader.setUniform("sampler", 0);
+		shader.setUniform("sampler", 1);
 		shader.setUniform("projection", target);
 
 		model.render();
