@@ -38,6 +38,14 @@ public class Game {
 		Game.shader = shader;
 		Game.renderer = renderer;
 	}
+	
+	public static Camera getCamera() {
+		return camera;
+	}
+
+	public static World getLevel() {
+		return level;
+	}
 
 	public void updateGui() {
 		guis.clear();
@@ -64,6 +72,13 @@ public class Game {
 			System.err.println("Level index is not correct.");
 			break;
 		}
+	}
+	
+	public static void onWindowResize() {
+		camera.setProjection(window.getWidth(), window.getHeight());
+		// life.resizeCamera(window);
+		level.calculateView(window);
+		GL11.glViewport(0, 0, window.getWidth(), window.getHeight());
 	}
 
 	public void loop() {
@@ -92,10 +107,7 @@ public class Game {
 
 			while (unprocessed >= frame_cap) {
 				if (window.hasResized()) {
-					camera.setProjection(window.getWidth(), window.getHeight());
-					// life.resizeCamera(window);
-					level.calculateView(window);
-					GL11.glViewport(0, 0, window.getWidth(), window.getHeight());
+					onWindowResize();
 				}
 				unprocessed -= frame_cap;
 				can_render = true;
@@ -147,10 +159,6 @@ public class Game {
 
 	public int getCurrentLevel() {
 		return current_level;
-	}
-
-	public World getLevel() {
-		return level;
 	}
 
 	public void update(float frame_cap) {

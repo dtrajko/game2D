@@ -7,6 +7,7 @@ import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
+import game.Game;
 import render.Camera;
 
 import org.lwjgl.glfw.Callbacks;
@@ -64,7 +65,6 @@ public class Window {
 
 	public void toggleFullscreen() {
 		int newWidth, newHeight;
-		System.out.println("Window switchWindow isFullscreen()=" + isFullscreen());
 		if (fullscreen) {
 			newWidth = WIDTH;
 			newHeight = HEIGHT;
@@ -76,17 +76,10 @@ public class Window {
 		}
 		long monitor = fullscreen ? GLFW.glfwGetPrimaryMonitor() : 0;
 		GLFW.glfwSetWindowMonitor(window, monitor, 0, 0, newWidth, newHeight, 0);
-		hasResized = true;
-
-		System.out.println("Window switchWindow newWidth=" + newWidth + " newHeight=" + newHeight + " monitor=" + monitor + " isFullscreen()=" + isFullscreen());
-
+		Game.onWindowResize();
 		if (!fullscreen) {
 			GLFW.glfwSetWindowPos(window, (videoMode.width() - width) / 2, (videoMode.height() - height) / 2);
-			// GLFW.glfwShowWindow(window);
 		}
-		GLFW.glfwMakeContextCurrent(window);
-		// this.input = new Input(this.window);
-		// setLocalCallbacks();
 	}
 
 	public void cleanUp() {

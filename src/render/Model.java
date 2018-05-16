@@ -16,8 +16,7 @@ public class Model {
 	public Model(float[] vertices, float[] tex_coords, int[] indices) {
 
 		draw_count = indices.length;
-		
-		System.out.println("Model::draw_count: " + draw_count);
+		// System.out.println("Model::draw_count: " + draw_count);
 
 		v_id = GL15.glGenBuffers();
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, v_id);
