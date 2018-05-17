@@ -1,6 +1,7 @@
 package collision;
 
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 public class AABB {
 	
@@ -46,5 +47,8 @@ public class AABB {
 
 	public Vector2f getCenter() { return center; }
 	public Vector2f getHalfExtent() { return half_extent; }
-	
+
+	public void setMinExtents(Vector3f vector3f) {
+		// TODO Auto-generated method stub
+	}
 }

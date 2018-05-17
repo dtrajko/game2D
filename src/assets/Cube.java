@@ -1,17 +1,6 @@
 package assets;
 
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
-
-import render.Camera;
-import render.Model;
-import render.Shader;
-import render.Texture;
-
 public class Cube {
-	
-	private Model model;
-	private Texture texture;
 
 	private static final float[] vertices = new float[] {
 		-0.5f,  0.5f, -0.5f,
@@ -87,11 +76,6 @@ public class Cube {
 		23, 21, 22,
 	};
 
-	public Cube() {
-		model = new Model(getVertices(), getTexCoords(), getIndices());
-		texture = new Texture("grass_light");
-	}
-
 	public static float[] getVertices() {
 		return vertices;
 	}
@@ -102,28 +86,5 @@ public class Cube {
 
 	public static int[] getIndices() {
 		return indices;
-	}
-
-	public Model getModel() { return model; }
-
-	public void delete() {
-		model = null;
-	}
-
-	public void render(int x, int y, int z, Shader shader, Matrix4f world, Camera camera) {
-		shader.bind();
-		
-		texture.bind(1);
-		
-		Matrix4f position = new Matrix4f().translate(new Vector3f(x * 2, y * 2, z * 2));
-		Matrix4f target = new Matrix4f();
-		
-		camera.getProjection().mul(world, target);
-		target.mul(position);
-
-		shader.setUniform("sampler", 1);
-		shader.setUniform("projection", target);
-
-		model.render();
 	}
 }

@@ -2,12 +2,12 @@ package render;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-public class Camera {
+public class Camera2D {
 
 	private Vector3f position;
 	private Matrix4f projection;
 
-	public Camera(int width, int height) {
+	public Camera2D(int width, int height) {
 		position = new Vector3f(0, 0, 0);
 		setProjection(width, height);
 	}

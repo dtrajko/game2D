@@ -17,8 +17,8 @@ import entities.Player;
 import entities.Transform;
 import game.Game;
 import io.Window;
-import render.Camera;
-import render.Shader;
+import render.Camera2D;
+import shaders.Shader;
 
 public class World {
 	private int view_width = 26;
@@ -30,7 +30,6 @@ public class World {
 	private int height;
 	private int scale;
 	private Matrix4f world;
-	private Cube cube; // temporary
 
 	public World(int width, int height, int scale) {
 		this.width = width;   // 16
@@ -42,7 +41,7 @@ public class World {
 		this.world.scale(scale);
 	}
 
-	public World(String worldName, Camera camera, int scale, int bg_tile, Game game) {
+	public World(String worldName, Camera2D camera, int scale, int bg_tile, Game game) {
 
 		String tileSheetPath = "./res/levels/" + worldName + "/tiles.png";
 		String entitySheetPath = "./res/levels/" + worldName + "/entities.png";
@@ -112,13 +111,11 @@ public class World {
 				}
 			}
 		}
-
-		cube = new Cube();
 	}
 
-	public void calculateView(Window window) {
-		this.view_width = window.getWidth() / (scale * 2) + 2;
-		this.view_height = window.getHeight() / (scale * 2) + 4;
+	public void calculateView() {
+		this.view_width = Window.getWidth() / (scale * 2) + 2;
+		this.view_height = Window.getHeight() / (scale * 2) + 4;
 	}
 
 	public Matrix4f getWorldMatrix() { return this.world; }
@@ -139,7 +136,7 @@ public class World {
 		return scale;
 	}
 
-	public void render(TileRenderer renderer, Shader shader, Camera camera) {
+	public void render(TileRenderer renderer, Shader shader, Camera2D camera) {
 		int posX = (int)camera.getPosition().x / (scale * 2);
 		int posY = (int)camera.getPosition().y / (scale * 2);
 		for (int i = 0; i < view_width; i++) {
@@ -150,15 +147,12 @@ public class World {
 				}
 			}
 		}
-
 		for (Entity entity : entities) {
 			entity.render(shader, camera, this);
 		}
-
-		cube.render(5, -25, 1, shader, world, camera);
 	}
 
-	public void update(float delta, Window window, Camera camera, Game game) {
+	public void update(float delta, Window window, Camera2D camera, Game game) {
 		for (Entity entity : entities) {
 			entity.update(delta, window, camera, this, game);
 		}
@@ -170,24 +164,24 @@ public class World {
 		}
 	}
 
-	public void correctCamera(Window window, Camera camera) {
+	public void correctCamera(Camera2D camera) {
 
 		Vector3f pos = camera.getPosition();
 
 		int w = -width * scale * 2;
 		int h = height * scale * 2;
 
-		if (pos.x > -(window.getWidth() / 2) + scale) {
-			pos.x = -(window.getWidth() / 2) + scale;
+		if (pos.x > -(Window.getWidth() / 2) + scale) {
+			pos.x = -(Window.getWidth() / 2) + scale;
 		}
-		if (pos.x < w + (window.getWidth() / 2) + scale) {
-			pos.x = w + (window.getWidth() / 2) + scale;
+		if (pos.x < w + (Window.getWidth() / 2) + scale) {
+			pos.x = w + (Window.getWidth() / 2) + scale;
 		}
-		if (pos.y < (window.getHeight() / 2) - scale) {
-			pos.y = (window.getHeight() / 2) - scale;
+		if (pos.y < (Window.getHeight() / 2) - scale) {
+			pos.y = (Window.getHeight() / 2) - scale;
 		}
-		if (pos.y > h - (window.getHeight() / 2) - scale) {
-			pos.y = h - (window.getHeight() / 2) - scale;
+		if (pos.y > h - (Window.getHeight() / 2) - scale) {
+			pos.y = h - (Window.getHeight() / 2) - scale;
 		}
 	}
 

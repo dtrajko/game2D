@@ -3,17 +3,28 @@ package game;
 import java.util.HashMap;
 import java.util.Map;
 import org.joml.Vector3f;
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
+import assets.Assets;
 import assets.Cube;
+import entities.Entity3D;
 import entities.Player;
 import entities.Transform;
 import gui.Gui;
 import io.Timer;
 import io.Window;
-import render.Camera;
-import render.Shader;
+import models.RawModel;
+import models.TexturedModel;
+import render.Camera2D;
+import render.Camera3D;
+import render.Loader;
+import render.Renderer;
 import render.TileSheet;
+import shaders.Shader;
+import shaders.StaticShader;
+import textures.ModelTexture;
 import world.TileRenderer;
 import world.World;
 
@@ -24,23 +35,63 @@ public class Game {
 	private static int TOTAL_LEVELS = 2;
 	private static World level;
 	private static Window window;
-	private static Camera camera;
-	private static Shader shader;
-	private static TileRenderer renderer;
+	private static Camera2D camera2D;
 	private int level_scale = 26;
 	private static Map<Gui, Transform> guis = new HashMap<Gui, Transform>();
 	private static Player player;
 	private static boolean switchLevel = true;
 
-	public Game(Window window, Camera camera, Shader shader, TileRenderer renderer) {
-		Game.window = window;
-		Game.camera = camera;
-		Game.shader = shader;
-		Game.renderer = renderer;
+	private static Shader shader2D;
+	private static TileRenderer renderer2D;
+	private static TileSheet sheet;
+
+	private Loader loader3D;
+	private StaticShader shader3D;
+	private Renderer renderer3D;
+	private RawModel model3D;
+	private Entity3D entity3D;
+	private TexturedModel texModel3D;
+	private Camera3D camera3D;
+
+	public Game() {
+		Game.window = new Window();
+		GL.createCapabilities();
+		GL11.glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		init2D();
+		init3D();
 	}
-	
-	public static Camera getCamera() {
-		return camera;
+
+	private void init2D() {
+		renderer2D = new TileRenderer();
+		shader2D = new Shader("shader");
+		camera2D = new Camera2D(Window.getWidth(), Window.getHeight());
+		sheet = new TileSheet("lives", 3);
+	}
+
+	private void init3D() {
+		loader3D = new Loader();
+		shader3D = new StaticShader();
+		renderer3D = new Renderer(shader3D);
+		model3D = loader3D.loadToVAO(Cube.getVertices(), Cube.getTexCoords(), Cube.getIndices());
+		texModel3D = new TexturedModel(model3D, new ModelTexture(loader3D.loadTexture("grass")));
+		entity3D = new Entity3D(texModel3D, new Vector3f(0, 0, -5), 0, 0, 0, 1);
+		camera3D = new Camera3D();
+	}
+
+	private void render3D() {
+		entity3D.increasePosition(0.002f, 0, 0);
+		entity3D.increaseRotation(1, 1, 0);
+		camera3D.move();
+		renderer3D.prepare();
+		shader3D.bind();
+		shader3D.loadViewMatrix(camera3D);
+		renderer3D.render(entity3D, shader3D);
+		shader3D.unbind();
+	}
+
+	public static Camera2D getCamera() {
+		return camera2D;
 	}
 
 	public static World getLevel() {
@@ -49,7 +100,6 @@ public class Game {
 
 	public void updateGui() {
 		guis.clear();
-		TileSheet sheet = new TileSheet("lives", 3);
 		int lives_x = -600;
 		int lives_y = -320;
 		for (int i = 0; i < player.getLives(); i++) {
@@ -61,12 +111,12 @@ public class Game {
 	public void beginLevel() {
 		switch (Game.current_level) {
 		case 1:
-			level = new World("level_1", Game.camera, this.level_scale, 5, this);
-			level.calculateView(window);
+			level = new World("level_1", Game.camera2D, this.level_scale, 5, this);
+			level.calculateView();
 			break;
 		case 2:
-			level = new World("level_2", Game.camera, this.level_scale, 0, this);
-			level.calculateView(window);
+			level = new World("level_2", Game.camera2D, this.level_scale, 0, this);
+			level.calculateView();
 			break;
 		default:
 			System.err.println("Level index is not correct.");
@@ -75,10 +125,9 @@ public class Game {
 	}
 	
 	public static void onWindowResize() {
-		camera.setProjection(window.getWidth(), window.getHeight());
-		// life.resizeCamera(window);
-		level.calculateView(window);
-		GL11.glViewport(0, 0, window.getWidth(), window.getHeight());
+		camera2D.setProjection(Window.getWidth(), Window.getHeight());
+		level.calculateView();
+		GL11.glViewport(0, 0, Window.getWidth(), Window.getHeight());
 	}
 
 	public void loop() {
@@ -111,8 +160,8 @@ public class Game {
 				}
 				unprocessed -= frame_cap;
 				can_render = true;
-				window.getInput().handle(window.getWindow());
-				this.update((float) frame_cap);
+				Window.getInput().handle(Window.getWindow());
+				update2D((float) frame_cap);
 				window.update();
 
 				if (frame_time >= 1.0) {
@@ -123,7 +172,6 @@ public class Game {
 			}
 
 			if (can_render) {
-				// GL11.glEnable(GL11.GL_DEPTH_TEST);
 				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT|GL11.GL_DEPTH_BUFFER_BIT);
 				this.render();
 				for (Gui gui : guis.keySet()) {
@@ -161,13 +209,21 @@ public class Game {
 		return current_level;
 	}
 
-	public void update(float frame_cap) {
+	public void update2D(float frame_cap) {
 		updateGui();
-		level.update(frame_cap * 10, window, camera, this);
-		level.correctCamera(window, camera);
+		level.update(frame_cap * 10, window, camera2D, this);
+		level.correctCamera(camera2D);
 	}
 	
 	public void render() {
-		level.render(renderer, shader, camera);
+		// level.render(renderer, shader, camera2D);
+		render3D();
+	}
+
+	public void cleanUp() {
+		Assets.deleteAsset();
+		shader3D.cleanUp();
+		loader3D.cleanUp();
+		GLFW.glfwTerminate();
 	}
 }

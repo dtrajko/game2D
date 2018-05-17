@@ -6,10 +6,10 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import assets.Sprite;
-import render.Camera;
+import render.Camera2D;
 import render.Model;
-import render.Shader;
-import render.Texture;
+import shaders.Shader;
+import textures.Texture;
 
 public class TileRenderer {
 	
@@ -32,7 +32,7 @@ public class TileRenderer {
 		}
 	}
 
-	public void renderTile(Tile tile, int x, int y, Shader shader, Matrix4f world, Camera camera) {
+	public void renderTile(Tile tile, int x, int y, Shader shader, Matrix4f world, Camera2D camera) {
 		shader.bind();
 
 		if (tile_textures.containsKey(tile.getTexture())) {

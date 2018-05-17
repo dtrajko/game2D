@@ -1,4 +1,4 @@
-package render;
+package textures;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -34,9 +34,7 @@ public class Texture {
 					 pixels.put((byte)((pixel >> 24) & 0xFF)); // ALPHA
 				 }
 			 }
-
 			 pixels.flip();
-			 
 			 id = GL11.glGenTextures();
 			 GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
 			 GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
@@ -48,7 +46,7 @@ public class Texture {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void bind(int sampler) {
 		if (sampler >= 0 && sampler <= 31 ) {
 			GL13.glActiveTexture(GL13.GL_TEXTURE0 + sampler);

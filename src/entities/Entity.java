@@ -10,9 +10,9 @@ import collision.Collision;
 import game.Game;
 import io.Window;
 import render.Animation;
-import render.Camera;
+import render.Camera2D;
 import render.Model;
-import render.Shader;
+import shaders.Shader;
 import world.Tile;
 import world.World;
 
@@ -101,7 +101,7 @@ public abstract class Entity {
 		}
 	}
 
-	public abstract void update(float delta, Window window, Camera camera, World world, Game game);
+	public abstract void update(float delta, Window window, Camera2D camera, World world, Game game);
 
 	public void correctPosition(Window window, World world) {
 
@@ -121,7 +121,7 @@ public abstract class Entity {
 		}
 	}
 
-	public void render(Shader shader, Camera camera, World world) {
+	public void render(Shader shader, Camera2D camera, World world) {
 		Matrix4f target = camera.getProjection();
 		target.mul(world.getWorldMatrix());
 		shader.bind();

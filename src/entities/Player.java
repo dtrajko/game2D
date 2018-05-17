@@ -7,7 +7,7 @@ import org.lwjgl.glfw.GLFW;
 import game.Game;
 import io.Window;
 import render.Animation;
-import render.Camera;
+import render.Camera2D;
 import world.Tile;
 import world.World;
 
@@ -35,7 +35,7 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public void update(float delta, Window window, Camera camera, World world, Game game) {
+	public void update(float delta, Window window, Camera2D camera, World world, Game game) {
 
 		this.useAnimation(ANIM_IDLE);
 		Vector2f movement = new Vector2f();

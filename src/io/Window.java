@@ -2,15 +2,8 @@ package io;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.glfw.GLFWVidMode.Buffer;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
-
 import game.Game;
-import render.Camera;
-
-import org.lwjgl.glfw.Callbacks;
 
 public class Window {
 
@@ -19,10 +12,10 @@ public class Window {
 	public static final String TITLE = "Java / LWJGL3 Game";
 	public static final boolean FULLSCREEN = false;
 
-	private long window;
-	private int width, height;
+	private static long window;
+	private static int width, height;
 	private String title;
-	private Input input;
+	private static Input input;
 	private boolean fullscreen;
 	private boolean hasResized;
 	private GLFWWindowSizeCallback windowSizeCallback;
@@ -50,13 +43,13 @@ public class Window {
 			GLFW.glfwShowWindow(window);
 		}
 		GLFW.glfwMakeContextCurrent(window);
-		this.input = new Input(this.window);
+		input = new Input(window);
 		setLocalCallbacks();
 	}
 
-	public void setSize(int width, int height) {
-		this.width = width;
-		this.height = height;
+	public void setSize(int newWidth, int newHeight) {
+		width = newWidth;
+		height = newHeight;
 	}
 
 	public void setFullscreen(boolean fullscreen) {
@@ -110,8 +103,8 @@ public class Window {
 		GLFW.glfwSetWindowSizeCallback(window, windowSizeCallback);
 	}
 
-	public long getWindow() {
-		return this.window;
+	public static long getWindow() {
+		return window;
 	}
 
 	public boolean shouldClose() {
@@ -126,9 +119,9 @@ public class Window {
 		GLFW.glfwSetWindowTitle(window, title);
 	}
 
-	public int getWidth() { return this.width; }
-	public int getHeight() { return this.height; }
+	public static int getWidth() { return width; }
+	public static int getHeight() { return height; }
 	public boolean hasResized() { return this.hasResized; }
 	public boolean isFullscreen() { return this.fullscreen; }
-	public Input getInput() { return this.input; }
+	public static Input getInput() { return input; }
 }

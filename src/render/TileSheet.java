@@ -2,6 +2,9 @@ package render;
 
 import org.joml.Matrix4f;
 
+import shaders.Shader;
+import textures.Texture;
+
 public class TileSheet {
 	
 	private Texture texture;

@@ -79,9 +79,9 @@ public class Model {
 	}
 
 	protected void finalize() throws Throwable {
-		GL15.glDeleteBuffers(v_id);
-		GL15.glDeleteBuffers(t_id);
-		GL15.glDeleteBuffers(i_id);
+		// GL15.glDeleteBuffers(v_id);
+		// GL15.glDeleteBuffers(t_id);
+		// GL15.glDeleteBuffers(i_id);
 		super.finalize();
 	}
 }
