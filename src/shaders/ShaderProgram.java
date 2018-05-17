@@ -3,6 +3,8 @@ package shaders;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.nio.FloatBuffer;
+
+import org.joml.Matrix3dc;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -76,12 +78,6 @@ public abstract class ShaderProgram {
 	protected int getUniformLocation(String uniformName) {
 		return GL20.glGetUniformLocation(programID, uniformName);
 	}
-
-	private void bindAttributes(String[] inVariables){
-		for(int i=0;i<inVariables.length;i++){
-			GL20.glBindAttribLocation(programID, i, inVariables[i]);
-		}
-	}
 	
 	protected void bindFragOutput(int attachment, String variableName) {
 		GL30.glBindFragDataLocation(programID, attachment, variableName);
@@ -114,9 +110,9 @@ public abstract class ShaderProgram {
 		}
 		GL20.glUniform1f(location, toLoad);
 	}
-	
+
 	protected void loadMatrix(int location, Matrix4f matrix) {
-		matrix.set(matrixBuffer);
+		matrix.get(matrixBuffer);
 		matrixBuffer.flip();
 		GL20.glUniformMatrix4fv(location, false, matrixBuffer);
 	}

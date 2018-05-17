@@ -16,6 +16,7 @@ import entities.Entity;
 import entities.Player;
 import entities.Transform;
 import game.Game;
+import game.Game2D;
 import io.Window;
 import render.Camera2D;
 import shaders.Shader;
@@ -41,7 +42,7 @@ public class World {
 		this.world.scale(scale);
 	}
 
-	public World(String worldName, Camera2D camera, int scale, int bg_tile, Game game) {
+	public World(String worldName, Camera2D camera, int scale, int bg_tile, Game2D game) {
 
 		String tileSheetPath = "./res/levels/" + worldName + "/tiles.png";
 		String entitySheetPath = "./res/levels/" + worldName + "/entities.png";
@@ -152,7 +153,7 @@ public class World {
 		}
 	}
 
-	public void update(float delta, Window window, Camera2D camera, Game game) {
+	public void update(float delta, Window window, Camera2D camera, Game2D game) {
 		for (Entity entity : entities) {
 			entity.update(delta, window, camera, this, game);
 		}

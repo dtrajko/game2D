@@ -5,6 +5,7 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 import game.Game;
+import game.Game2D;
 import io.Window;
 import render.Animation;
 import render.Camera2D;
@@ -35,7 +36,7 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public void update(float delta, Window window, Camera2D camera, World world, Game game) {
+	public void update(float delta, Window window, Camera2D camera, World world, Game2D game) {
 
 		this.useAnimation(ANIM_IDLE);
 		Vector2f movement = new Vector2f();
@@ -49,37 +50,37 @@ public class Player extends Entity {
 		}
 		previous_height = this.transform.position.y;
 
-		if (window.getInput().isKeyDown(GLFW.GLFW_KEY_A) || window.getInput().isKeyDown(GLFW.GLFW_KEY_LEFT)) {
+		if (Window.getInput().isKeyDown(GLFW.GLFW_KEY_A) || Window.getInput().isKeyDown(GLFW.GLFW_KEY_LEFT)) {
 			movement.add(-delta, 0);
 			this.useAnimation(ANIM_WALK);
 		}
-		if (window.getInput().isKeyDown(GLFW.GLFW_KEY_D) || window.getInput().isKeyDown(GLFW.GLFW_KEY_RIGHT)) {
+		if (Window.getInput().isKeyDown(GLFW.GLFW_KEY_D) || Window.getInput().isKeyDown(GLFW.GLFW_KEY_RIGHT)) {
 			movement.add(delta, 0);
 			this.useAnimation(ANIM_WALK);
 		}
-		if (window.getInput().isKeyDown(GLFW.GLFW_KEY_W)) {
+		if (Window.getInput().isKeyDown(GLFW.GLFW_KEY_W)) {
 			// movement.add(0, delta);
 			// this.useAnimation(ANIM_WALK);
 		}
-		if (window.getInput().isKeyDown(GLFW.GLFW_KEY_S)) {
+		if (Window.getInput().isKeyDown(GLFW.GLFW_KEY_S)) {
 			// movement.add(0, -delta);
 			// this.useAnimation(ANIM_WALK);
 		}
-		if (window.getInput().isKeyDown(GLFW.GLFW_KEY_SPACE) && jump_allowed) {
+		if (Window.getInput().isKeyDown(GLFW.GLFW_KEY_SPACE) && jump_allowed) {
 			subsequent_jumps++;
 			movement.add(0, delta * (JUMP_FORCE / (subsequent_jumps * (GRAVITY * 2))));
 			this.useAnimation(ANIM_WALK);
 		}
-		if (window.getInput().isKeyReleased(GLFW.GLFW_KEY_SPACE)) {
+		if (Window.getInput().isKeyReleased(GLFW.GLFW_KEY_SPACE)) {
 			subsequent_jumps = 0;
 		}
-		if (window.getInput().isKeyReleased(GLFW.GLFW_KEY_F) || window.getInput().isKeyPressed(GLFW.GLFW_KEY_ENTER)) {
+		if (Window.getInput().isKeyReleased(GLFW.GLFW_KEY_F) || Window.getInput().isKeyPressed(GLFW.GLFW_KEY_ENTER)) {
 			window.toggleFullscreen();
 		}
-		if (window.getInput().isKeyReleased(GLFW.GLFW_KEY_1)) {
+		if (Window.getInput().isKeyReleased(GLFW.GLFW_KEY_1)) {
 			game.setLevel(1);
 		}
-		if (window.getInput().isKeyReleased(GLFW.GLFW_KEY_2)) {
+		if (Window.getInput().isKeyReleased(GLFW.GLFW_KEY_2)) {
 			game.setLevel(2);
 		}
 
@@ -91,7 +92,7 @@ public class Player extends Entity {
 		manageLevels(game, world);
 	}
 
-	public void manageLevels(Game game, World world) {
+	public void manageLevels(Game2D game, World world) {
 		if (isNextLevel(world)) {
 			game.setLevel(game.getCurrentLevel() + 1);
 		} else if (isPreviousLevel(world)) {
@@ -114,7 +115,7 @@ public class Player extends Entity {
 		return getCurrentTile(world).isPreviousLevel();
 	}
 
-	public void manageLives(Game game, World world) {
+	public void manageLives(Game2D game, World world) {
 		if (previous_height == this.transform.position.y) {
 			return;
 		}

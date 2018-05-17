@@ -21,7 +21,7 @@ public class Main {
 			System.exit(-1);
 		}
 
-		Game game = new Game();
+		Game game = new Game3D();
 		game.loop();
 		game.cleanUp();
 	}
