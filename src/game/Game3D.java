@@ -48,7 +48,7 @@ public class Game3D extends Game {
 		renderer3D = new Renderer(shader3D);
 		model3D = loader3D.loadToVAO(Cube.getVertices(), Cube.getTexCoords(), Cube.getIndices());
 		texModel3D = new TexturedModel(model3D, new ModelTexture(loader3D.loadTexture("grass")));
-		entity3D = new Entity3D(texModel3D, new Vector3f(0, 0, -5), 0, 0, 0, 1);
+		entity3D = new Entity3D(texModel3D, new Vector3f(-1, 0, 0), 0, 0, 0, 1);
 		camera3D = new Camera3D();
 	}
 
@@ -68,6 +68,8 @@ public class Game3D extends Game {
 	}
 
 	public void loop() {
+
+		GL.createCapabilities();
 
 		double frame_cap = 1.0 / 120.0;
 		double frame_time = 0;
@@ -103,11 +105,9 @@ public class Game3D extends Game {
 			}
 
 			if (can_render) {
-				GL11.glEnable(GL11.GL_DEPTH);
-				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT|GL11.GL_DEPTH_BUFFER_BIT);
 				this.render();
 				window.swapBuffers();
-				Game3D.FPS++;
+				FPS++;
 			}
 		}
 	}

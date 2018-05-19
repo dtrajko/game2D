@@ -47,6 +47,12 @@ public class Game2D extends Game {
 		init2D();
 	}
 
+	public static void onWindowResize() {
+		camera2D.setProjection(Window.getWidth(), Window.getHeight());
+		level.calculateView();
+		GL11.glViewport(0, 0, Window.getWidth(), Window.getHeight());
+	}
+
 	private void init2D() {
 		renderer2D = new TileRenderer();
 		shader2D = new Shader("shader");
@@ -86,12 +92,6 @@ public class Game2D extends Game {
 			System.err.println("Level index is not correct.");
 			break;
 		}
-	}
-	
-	public static void onWindowResize() {
-		camera2D.setProjection(Window.getWidth(), Window.getHeight());
-		level.calculateView();
-		GL11.glViewport(0, 0, Window.getWidth(), Window.getHeight());
 	}
 
 	public void loop() {

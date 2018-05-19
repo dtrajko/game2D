@@ -18,7 +18,7 @@ public abstract class Game {
 		GL11.glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
-	
+
 	public static void onWindowResize() {
 		GL11.glViewport(0, 0, Window.getWidth(), Window.getHeight());
 	}

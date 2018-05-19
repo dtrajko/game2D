@@ -1,14 +1,7 @@
 package game;
 
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
-import assets.Assets;
-import assets.Cube;
 import io.Window;
-import render.Camera2D;
-import shaders.Shader;
-import world.TileRenderer;
 
 public class Main {
 

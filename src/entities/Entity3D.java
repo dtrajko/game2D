@@ -28,32 +28,6 @@ public class Entity3D {
 		this.scale = scale;
 	}
 
-	public boolean isRenderingEnabled() {
-		return renderingEnabled;
-	}
-
-	public void setRenderingEnabled(boolean renderingEnabled) {
-		this.renderingEnabled = renderingEnabled;
-	}
-
-	public void setAABB(AABB aabb) {
-		this.aabb = aabb;
-	}
-
-	public AABB getAABB() {
-		return	aabb;
-	}
-
-	public float getTextureXOffset() {
-		int column = textureIndex % model.getTexture().getNumberOfRows();
-		return (float) column / (float) model.getTexture().getNumberOfRows();
-	}
-
-	public float getTextureYOffset() {
-		int row = textureIndex / model.getTexture().getNumberOfRows();
-		return (float) row / (float) model.getTexture().getNumberOfRows();
-	}
-
 	public void increasePosition(float dx, float dy, float dz) {
 		this.position.x += dx;
 		this.position.y += dy;
@@ -114,5 +88,31 @@ public class Entity3D {
 
 	public void setScale(float scale) {
 		this.scale = scale;
+	}
+
+	public boolean isRenderingEnabled() {
+		return renderingEnabled;
+	}
+
+	public void setRenderingEnabled(boolean renderingEnabled) {
+		this.renderingEnabled = renderingEnabled;
+	}
+
+	public void setAABB(AABB aabb) {
+		this.aabb = aabb;
+	}
+
+	public AABB getAABB() {
+		return	aabb;
+	}
+
+	public float getTextureXOffset() {
+		int column = textureIndex % model.getTexture().getNumberOfRows();
+		return (float) column / (float) model.getTexture().getNumberOfRows();
+	}
+
+	public float getTextureYOffset() {
+		int row = textureIndex / model.getTexture().getNumberOfRows();
+		return (float) row / (float) model.getTexture().getNumberOfRows();
 	}
 }

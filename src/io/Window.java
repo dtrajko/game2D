@@ -1,4 +1,9 @@
 package io;
+import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
+import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
+import static org.lwjgl.glfw.GLFW.glfwShowWindow;
+import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
+
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -30,8 +35,14 @@ public class Window {
 	}
 
 	public void createWindow() {
+
+		GLFW.glfwDefaultWindowHints();
+		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
+		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 2);
+		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
+		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GLFW.GLFW_TRUE);
 		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
-		
+
 		long monitor = fullscreen ? GLFW.glfwGetPrimaryMonitor() : 0;
 		window = GLFW.glfwCreateWindow(width, height, this.title, monitor, 0);
 		if (window == 0) {
@@ -40,9 +51,12 @@ public class Window {
 		if (!fullscreen) {
 			videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
 			GLFW.glfwSetWindowPos(window, (videoMode.width() - width) / 2, (videoMode.height() - height) / 2);
-			GLFW.glfwShowWindow(window);
 		}
+
 		GLFW.glfwMakeContextCurrent(window);
+		GLFW.glfwSwapInterval(0);
+		GLFW.glfwShowWindow(window);
+
 		input = new Input(window);
 		setLocalCallbacks();
 	}
