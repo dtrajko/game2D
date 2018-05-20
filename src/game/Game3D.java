@@ -30,37 +30,37 @@ import world.World;
 
 public class Game3D extends Game {
 
-	private Loader loader3D;
-	private StaticShader shader3D;
-	private Renderer renderer3D;
-	private RawModel model3D;
-	private Entity3D entity3D;
-	private TexturedModel texModel3D;
-	private Camera3D camera3D;
+	private Loader loader;
+	private StaticShader shader;
+	private Renderer renderer;
+	private RawModel model;
+	private Entity3D entity;
+	private TexturedModel texModel;
+	private Camera3D camera;
 
 	public Game3D() {
 		init3D();
 	}
 
 	private void init3D() {
-		loader3D = new Loader();
-		shader3D = new StaticShader();
-		renderer3D = new Renderer(shader3D);
-		model3D = loader3D.loadToVAO(Cube.getVertices(), Cube.getTexCoords(), Cube.getIndices());
-		texModel3D = new TexturedModel(model3D, new ModelTexture(loader3D.loadTexture("grass")));
-		entity3D = new Entity3D(texModel3D, new Vector3f(-1, 0, 0), 0, 0, 0, 1);
-		camera3D = new Camera3D();
+		loader = new Loader();
+		shader = new StaticShader();
+		renderer = new Renderer(shader);
+		model = loader.loadToVAO(Cube.getVertices(), Cube.getTexCoords(), Cube.getIndices());
+		texModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("grass")));
+		entity = new Entity3D(texModel, new Vector3f(2, 2, -10), 0, 0, 0, 1);
+		camera = new Camera3D();
 	}
 
 	private void render3D() {
-		entity3D.increasePosition(0.002f, 0, 0);
-		entity3D.increaseRotation(1, 1, 0);
-		camera3D.move();
-		renderer3D.prepare();
-		shader3D.bind();
-		shader3D.loadViewMatrix(camera3D);
-		renderer3D.render(entity3D, shader3D);
-		shader3D.unbind();
+		entity.increasePosition(0.002f, 0, 0);
+		entity.increaseRotation(1, 1, 0);
+		camera.move();
+		renderer.prepare();
+		shader.bind();
+		shader.loadViewMatrix(camera);
+		renderer.render(entity, shader);
+		shader.unbind();
 	}
 	
 	public static void onWindowResize() {
@@ -117,8 +117,8 @@ public class Game3D extends Game {
 	}
 
 	public void cleanUp() {
-		shader3D.cleanUp();
-		loader3D.cleanUp();
+		shader.cleanUp();
+		loader.cleanUp();
 		super.cleanUp();
 	}
 }

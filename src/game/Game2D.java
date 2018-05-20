@@ -33,7 +33,7 @@ public class Game2D extends Game {
 	private static int current_level = 1;
 	private static int TOTAL_LEVELS = 2;
 	private static World level;
-	private static Camera2D camera2D;
+	private static Camera2D camera;
 	private int level_scale = 26;
 	private static Map<Gui, Transform> guis = new HashMap<Gui, Transform>();
 	private static Player player;
@@ -48,7 +48,7 @@ public class Game2D extends Game {
 	}
 
 	public static void onWindowResize() {
-		camera2D.setProjection(Window.getWidth(), Window.getHeight());
+		camera.setProjection(Window.getWidth(), Window.getHeight());
 		level.calculateView();
 		GL11.glViewport(0, 0, Window.getWidth(), Window.getHeight());
 	}
@@ -56,12 +56,12 @@ public class Game2D extends Game {
 	private void init2D() {
 		renderer2D = new TileRenderer();
 		shader2D = new Shader("shader");
-		camera2D = new Camera2D(Window.getWidth(), Window.getHeight());
+		camera = new Camera2D(Window.getWidth(), Window.getHeight());
 		sheet = new TileSheet("lives", 3);
 	}
 
 	public static Camera2D getCamera() {
-		return camera2D;
+		return camera;
 	}
 
 	public static World getLevel() {
@@ -81,11 +81,11 @@ public class Game2D extends Game {
 	public void beginLevel() {
 		switch (Game2D.current_level) {
 		case 1:
-			level = new World("level_1", Game2D.camera2D, this.level_scale, 5, this);
+			level = new World("level_1", Game2D.camera, this.level_scale, 5, this);
 			level.calculateView();
 			break;
 		case 2:
-			level = new World("level_2", Game2D.camera2D, this.level_scale, 0, this);
+			level = new World("level_2", Game2D.camera, this.level_scale, 0, this);
 			level.calculateView();
 			break;
 		default:
@@ -175,12 +175,12 @@ public class Game2D extends Game {
 
 	public void update2D(float frame_cap) {
 		updateGui();
-		level.update(frame_cap * 10, window, camera2D, this);
-		level.correctCamera(camera2D);
+		level.update(frame_cap * 10, window, camera, this);
+		level.correctCamera(camera);
 	}
 	
 	public void render() {
-		level.render(renderer2D, shader2D, camera2D);
+		level.render(renderer2D, shader2D, camera);
 	}
 
 	public void cleanUp() {
