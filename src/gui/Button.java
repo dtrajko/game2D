@@ -5,9 +5,9 @@ import org.joml.Vector2f;
 
 import assets.Assets;
 import collision.AABB;
-import render.Camera2D;
+import render.Camera;
+import render.Shader;
 import render.TileSheet;
-import shaders.Shader;
 
 public class Button {
 
@@ -27,7 +27,7 @@ public class Button {
 		this.scale = this.boundingBox.getHalfExtent();
 	}
 
-	public void render(Camera2D camera, TileSheet sheet, Shader shader) {
+	public void render(Camera camera, TileSheet sheet, Shader shader) {
 
 		shader.bind();
 
@@ -40,7 +40,7 @@ public class Button {
 		this.renderCorners(camera, sheet, shader);
 	}
 	
-	private void renderSides(Camera2D camera, TileSheet sheet, Shader shader) {
+	private void renderSides(Camera camera, TileSheet sheet, Shader shader) {
 
 		transform.identity().translate(position.x, position.y + scale.y - 16, 0).scale(scale.x, 16, 1); // Top
 		shader.setUniform("projection", camera.getProjection().mul(transform));
@@ -63,7 +63,7 @@ public class Button {
 		Assets.getModel().render();
 	}
 
-	private void renderCorners(Camera2D camera, TileSheet sheet, Shader shader) {
+	private void renderCorners(Camera camera, TileSheet sheet, Shader shader) {
 
 		transform.identity().translate(position.x - scale.x + 16, position.y + scale.y - 16, 0).scale(16, 16, 1); // Top Left
 		shader.setUniform("projection", camera.getProjection().mul(transform));

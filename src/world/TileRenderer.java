@@ -5,11 +5,10 @@ import java.util.HashMap;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-import assets.Sprite;
-import render.Camera2D;
+import render.Camera;
 import render.Model;
-import shaders.Shader;
-import textures.Texture;
+import render.Shader;
+import render.Texture;
 
 public class TileRenderer {
 	
@@ -32,7 +31,7 @@ public class TileRenderer {
 		}
 	}
 
-	public void renderTile(Tile tile, int x, int y, Shader shader, Matrix4f world, Camera2D camera) {
+	public void renderTile(Tile tile, int x, int y, Shader shader, Matrix4f world, Camera camera) {
 		shader.bind();
 
 		if (tile_textures.containsKey(tile.getTexture())) {
@@ -49,5 +48,6 @@ public class TileRenderer {
 		shader.setUniform("projection", target);
 
 		model.render();
+		// shader.unbind();
 	}
 }

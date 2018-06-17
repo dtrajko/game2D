@@ -1,92 +1,66 @@
 package io;
-import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
-import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
-import static org.lwjgl.glfw.GLFW.glfwShowWindow;
-import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
-
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
-import game.Game;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.glfw.Callbacks;
 
 public class Window {
 
-	public static final int WIDTH = 1280;
-	public static final int HEIGHT = 720;
-	public static final String TITLE = "Java / LWJGL3 Game";
-	public static final boolean FULLSCREEN = false;
-
-	private static long window;
-	private static int width, height;
+	private long window;
+	private int width, height;
 	private String title;
-	private static Input input;
+	private Input input;
 	private boolean fullscreen;
 	private boolean hasResized;
 	private GLFWWindowSizeCallback windowSizeCallback;
 	private GLFWVidMode videoMode;
 
-	public Window() {
-		setSize(WIDTH, HEIGHT); // default values
-		this.title = TITLE;
+	public Window(int width, int height, String title, boolean fullscreen) {
+		setSize(width, height); // default values
+		this.title = title;
 		setFullscreen(fullscreen);
 		createWindow();
 		this.hasResized = false;
 	}
 
 	public void createWindow() {
-
-		GLFW.glfwDefaultWindowHints();
-		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
-		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 2);
-		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
-		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GLFW.GLFW_TRUE);
 		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
-
-		long monitor = fullscreen ? GLFW.glfwGetPrimaryMonitor() : 0;
-		window = GLFW.glfwCreateWindow(width, height, this.title, monitor, 0);
+		window = GLFW.glfwCreateWindow(width, height, this.title, 
+			fullscreen ? GLFW.glfwGetPrimaryMonitor() : 0, 0);
 		if (window == 0) {
 			throw new IllegalStateException("Failed to create window!");
 		}
 		if (!fullscreen) {
 			videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
 			GLFW.glfwSetWindowPos(window, (videoMode.width() - width) / 2, (videoMode.height() - height) / 2);
+			GLFW.glfwShowWindow(window);
 		}
-
 		GLFW.glfwMakeContextCurrent(window);
-		GLFW.glfwSwapInterval(0);
-		GLFW.glfwShowWindow(window);
-
-		input = new Input(window);
+		this.input = new Input(this.window);
 		setLocalCallbacks();
 	}
 
-	public void setSize(int newWidth, int newHeight) {
-		width = newWidth;
-		height = newHeight;
-	}
-
-	public void setFullscreen(boolean fullscreen) {
-		this.fullscreen = fullscreen;
-	}
-
-	public void toggleFullscreen() {
-		int newWidth, newHeight;
-		if (fullscreen) {
-			newWidth = WIDTH;
-			newHeight = HEIGHT;
-			fullscreen = false;
-		} else {
-			newWidth = videoMode.width();
-			newHeight = videoMode.height();
-			fullscreen = true;
+	public void switchWindow() {
+		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
+		long newWindow = GLFW.glfwCreateWindow(width, height, this.title, 
+			fullscreen ? GLFW.glfwGetPrimaryMonitor() : 0, 0);
+		if (newWindow == 0) {
+			throw new IllegalStateException("Failed to switch window!");
 		}
-		long monitor = fullscreen ? GLFW.glfwGetPrimaryMonitor() : 0;
-		GLFW.glfwSetWindowMonitor(window, monitor, 0, 0, newWidth, newHeight, 0);
-		Game.onWindowResize();
+		GLFW.glfwDestroyWindow(window);
+		window = newWindow;
 		if (!fullscreen) {
+			videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
 			GLFW.glfwSetWindowPos(window, (videoMode.width() - width) / 2, (videoMode.height() - height) / 2);
+			GLFW.glfwShowWindow(window);
 		}
+		GLFW.glfwMakeContextCurrent(window);
+		this.input = new Input(this.window);
+		setLocalCallbacks();
+		GL.createCapabilities();
 	}
 
 	public void cleanUp() {
@@ -117,8 +91,8 @@ public class Window {
 		GLFW.glfwSetWindowSizeCallback(window, windowSizeCallback);
 	}
 
-	public static long getWindow() {
-		return window;
+	public long getWindow() {
+		return this.window;
 	}
 
 	public boolean shouldClose() {
@@ -133,9 +107,23 @@ public class Window {
 		GLFW.glfwSetWindowTitle(window, title);
 	}
 
-	public static int getWidth() { return width; }
-	public static int getHeight() { return height; }
+	public void setSize(int width, int height) {
+		this.width = width;
+		this.height = height;
+	}
+
+	public void setFullscreen(boolean fullscreen) {
+		this.fullscreen = fullscreen;
+	}
+
+	public int getWidth() { return this.width; }
+	public int getHeight() { return this.height; }
 	public boolean hasResized() { return this.hasResized; }
 	public boolean isFullscreen() { return this.fullscreen; }
-	public static Input getInput() { return input; }
+	public Input getInput() { return this.input; }
+
+	public void toggleFullscreen() {
+		fullscreen = true;
+		switchWindow();
+	}
 }

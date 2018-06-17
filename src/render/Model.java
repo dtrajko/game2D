@@ -5,6 +5,8 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL21;
+import org.lwjgl.opengl.GL30;
 
 public class Model {
 	
@@ -16,7 +18,6 @@ public class Model {
 	public Model(float[] vertices, float[] tex_coords, int[] indices) {
 
 		draw_count = indices.length;
-		// System.out.println("Model::draw_count: " + draw_count);
 
 		v_id = GL15.glGenBuffers();
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, v_id);
@@ -59,10 +60,6 @@ public class Model {
 		GL20.glDisableVertexAttribArray(0);
 		GL20.glDisableVertexAttribArray(1);
 	}
-	
-	public int getDrawCount() {
-		return draw_count;
-	}
 
 	private FloatBuffer createFloatBuffer(float[] data) {
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
@@ -79,9 +76,9 @@ public class Model {
 	}
 
 	protected void finalize() throws Throwable {
-		// GL15.glDeleteBuffers(v_id);
-		// GL15.glDeleteBuffers(t_id);
-		// GL15.glDeleteBuffers(i_id);
+		GL15.glDeleteBuffers(v_id);
+		GL15.glDeleteBuffers(t_id);
+		GL15.glDeleteBuffers(i_id);
 		super.finalize();
 	}
 }

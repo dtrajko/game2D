@@ -5,7 +5,7 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="game2D/lib/lwjgl3"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="shaders"/>
+	<classpathentry kind="src" path="lib/joml"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/lwjgl3/lwjgl/lwjgl.jar">
 		<attributes>
@@ -38,6 +38,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/joml/joml-1.9.9.jar"/>
-	<classpathentry kind="lib" path="lib/jars/slick-util.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

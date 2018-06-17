@@ -1,26 +1,69 @@
 package game;
 
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL;
+import java.util.HashMap;
+import java.util.Map;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
-
+import entities.Player;
+import entities.Transform;
+import gui.Gui;
 import io.Timer;
 import io.Window;
+import render.Camera;
+import render.Shader;
+import render.TileSheet;
+import world.TileRenderer;
+import world.World;
 
-public abstract class Game {
+public class Game {
 
-	protected static int FPS = 0;
-	protected static Window window;
+	private static String title;
+	private static int FPS = 0;
+	private static int current_level = 1;
+	private static int TOTAL_LEVELS = 2;
+	private static World level;
+	private static Window window;
+	private static Camera camera;
+	private static Shader shader;
+	private static TileRenderer renderer;
+	private int level_scale = 26;
+	private static Map<Gui, Transform> guis = new HashMap<Gui, Transform>();
+	private static Player player;
+	private static boolean switchLevel = true;
 
-	public Game() {
-		window = new Window();
-		GL.createCapabilities();
-		GL11.glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+	public Game(String title, Window window, Camera camera, Shader shader, TileRenderer renderer) {
+		Game.window = window;
+		Game.camera = camera;
+		Game.shader = shader;
+		Game.renderer = renderer;
+		Game.title = title;
 	}
 
-	public static void onWindowResize() {
-		GL11.glViewport(0, 0, Window.getWidth(), Window.getHeight());
+	public void updateGui() {
+		guis.clear();
+		TileSheet sheet = new TileSheet("lives", 3);
+		int lives_x = -600;
+		int lives_y = -320;
+		for (int i = 0; i < player.getLives(); i++) {
+			guis.put(new Gui(sheet, window), new Transform(new Vector3f(lives_x, lives_y, 0), 20));
+			lives_x += 45;
+		}
+	}
+
+	public void beginLevel() {
+		switch (Game.current_level) {
+		case 1:
+			level = new World("level_1", Game.camera, this.level_scale, 5, this);
+			level.calculateView(window);
+			break;
+		case 2:
+			level = new World("level_2", Game.camera, this.level_scale, 0, this);
+			level.calculateView(window);
+			break;
+		default:
+			System.err.println("Level index is not correct.");
+			break;
+		}
 	}
 
 	public void loop() {
@@ -33,7 +76,12 @@ public abstract class Game {
 		boolean can_render;
 		double passed;
 
-		while (!window.shouldClose()) {
+		while (!window.shouldClose() && !gameOver()) {
+
+			if (switchLevel == true) {
+				beginLevel();
+				switchLevel = false;
+			}
 
  			can_render = false;
 			time_2 = Timer.getTime();
@@ -44,33 +92,73 @@ public abstract class Game {
 
 			while (unprocessed >= frame_cap) {
 				if (window.hasResized()) {
-					onWindowResize();
+					camera.setProjection(window.getWidth(), window.getHeight());
+					// life.resizeCamera(window);
+					level.calculateView(window);
+					GL11.glViewport(0, 0, window.getWidth(), window.getHeight());
 				}
 				unprocessed -= frame_cap;
 				can_render = true;
-				Window.getInput().handle(Window.getWindow());
+				window.getInput().handle(window.getWindow());
+				this.update((float) frame_cap);
 				window.update();
 
 				if (frame_time >= 1.0) {
 					frame_time = 0;
-					window.setTitle(Window.TITLE + " | FPS: " + FPS);
+					window.setTitle(title + " | FPS: " + FPS);
 					FPS = 0;
 				}
 			}
 
 			if (can_render) {
-				GL11.glEnable(GL11.GL_DEPTH);
-				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT|GL11.GL_DEPTH_BUFFER_BIT);
+				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 				this.render();
+				for (Gui gui : guis.keySet()) {
+					gui.render(guis.get(gui), 0);
+				}
 				window.swapBuffers();
 				Game.FPS++;
 			}
 		}
 	}
-	
-	public abstract void render();
 
-	public void cleanUp() {
-		GLFW.glfwTerminate();
+	private boolean gameOver() {
+		if (player instanceof Player) {
+			return player.getLives() <= 0;
+		}
+		return false;
+	}
+
+	public void setPlayer(Player player) {
+		Game.player = player;
+	}
+	
+	public Player getPlayer() {
+		return player;
+	}
+	
+	public void setLevel(int level) {
+		if (level < 1) level = 1;
+		if (level > TOTAL_LEVELS) level = 1; // TOTAL_LEVELS;
+		current_level = level;
+		this.switchLevel = true;
+	}
+
+	public int getCurrentLevel() {
+		return current_level;
+	}
+
+	public World getLevel() {
+		return level;
+	}
+
+	public void update(float frame_cap) {
+		updateGui();
+		level.update(frame_cap * 10, window, camera, this);
+		level.correctCamera(window, camera);
+	}
+	
+	public void render() {
+		level.render(renderer, shader, camera);
 	}
 }

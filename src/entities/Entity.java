@@ -8,12 +8,11 @@ import assets.Assets;
 import collision.AABB;
 import collision.Collision;
 import game.Game;
-import game.Game2D;
 import io.Window;
 import render.Animation;
-import render.Camera2D;
+import render.Camera;
 import render.Model;
-import shaders.Shader;
+import render.Shader;
 import world.Tile;
 import world.World;
 
@@ -36,9 +35,7 @@ public abstract class Entity {
 			new Vector2f(transform.position.x, transform.position.y), 
 			new Vector2f(this.transform.scale.x, this.transform.scale.y));
 	}
-
-	public abstract void update(float delta, Window window, Camera2D camera, World world, Game2D game);
-
+	
 	public void setAnimation(int index, Animation animation) {
 		try {
 			this.animations[index] = animation;
@@ -104,6 +101,8 @@ public abstract class Entity {
 		}
 	}
 
+	public abstract void update(float delta, Window window, Camera camera, World world, Game game);
+
 	public void correctPosition(Window window, World world) {
 
 		Vector3f pos = this.transform.position;
@@ -122,7 +121,7 @@ public abstract class Entity {
 		}
 	}
 
-	public void render(Shader shader, Camera2D camera, World world) {
+	public void render(Shader shader, Camera camera, World world) {
 		Matrix4f target = camera.getProjection();
 		target.mul(world.getWorldMatrix());
 		shader.bind();

@@ -1,7 +1,6 @@
 package render;
 
 import io.Timer;
-import textures.Texture;
 
 public class Animation {
 	
